@@ -1,5 +1,0 @@
-{
-  "ERR_EYE_SPACING_OUT_OF_BOUNDS": "Eye spacing ratio exceeded the 0.05 deviation limit.",
-  "ERR_SKIN_TONE_DRIFT": "Skin tone Delta E exceeded the maximum allowed perceptual shift.",
-  "ERR_UNCALIBRATED_MILLIMETERS": "Attempted to verify uncalibrated absolute millimeters."
-}
