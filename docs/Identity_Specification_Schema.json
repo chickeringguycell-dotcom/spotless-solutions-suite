@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://viperstudios.com/schemas/identity_specification_schema.json",
+  "title": "Identity Specification Package",
+  "type": "object",
+  "required": [
+    "provenance",
+    "geometric_measurements",
+    "color_samples",
+    "structural_masks",
+    "protected_features"
+  ],
+  "properties": {
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "subject_id": { "type": "string" },
+        "project_id": { "type": "string" },
+        "source_image_manifest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "image_id": { "type": "string" },
+              "view_type": { 
+                "type": "string",
+                "enum": ["FRONTAL", "PROFILE_LEFT", "PROFILE_RIGHT", "THREE_QUARTER_LEFT", "THREE_QUARTER_RIGHT", "TOP", "BOTTOM", "REAR"]
+              },
+              "resolution": { "type": "array", "items": { "type": "integer" } },
+              "hash": { "type": "string" }
+            }
+          }
+        },
+        "protocol_version": { "type": "string" },
+        "schema_version": { "type": "string" },
+        "extractor_version": { "type": "string" },
+        "creation_timestamp": { "type": "string", "format": "date-time" },
+        "missing_data_declarations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "health_report": {
+          "type": "object",
+          "properties": {
+            "consistency_status": { "type": "string" },
+            "warnings": { "type": "array", "items": { "type": "string" } },
+            "contradictions": { "type": "array", "items": { "type": "string" } },
+            "impossible_geometry": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      },
+      "required": [
+        "subject_id",
+        "protocol_version",
+        "creation_timestamp"
+      ]
+    },
+    "geometric_measurements": {
+      "type": "object",
+      "properties": {
+        "landmarks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/landmark" }
+        },
+        "triangulation": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3,
+            "maxItems": 3,
+            "description": "Indices of landmarks forming a triangle"
+          }
+        },
+        "inter_landmark_distances": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/measurement" }
+        },
+        "ratios": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/measurement" }
+        },
+        "asymmetry_pairs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "volume_estimates": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/measurement" }
+        }
+      }
+    },
+    "color_samples": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/color_sample" }
+    },
+    "structural_masks": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/structural_mask" }
+    },
+    "protected_features": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/protected_feature" }
+      }
+    },
+    "categorical_attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string" },
+          "confidence": { "type": "number" },
+          "source_view": { "type": "string" },
+          "knowledge_reference": { "type": "string" },
+          "future_research": { "type": "string" },
+          "confidence_notes": { "type": "string" },
+          "correction_notes": { "type": "string" },
+          "extraction_type": {
+            "type": "string",
+            "enum": ["OBSERVED", "HEURISTIC", "INFERRED"]
+          }
+        },
+        "required": ["value", "confidence", "extraction_type"]
+      }
+    }
+  },
+  "$defs": {
+    "measurement": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "number" },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "source_pixels",
+            "normalized_ratio",
+            "normalized_coordinates",
+            "estimated_millimeters",
+            "calibrated_millimeters"
+          ]
+        },
+        "confidence": { "type": "number" },
+        "uncertainty": { "type": "number" },
+        "acquisition_method": { "type": "string" },
+        "source_image_id": { "type": "string" },
+        "source_view": { "type": "string" },
+        "coordinate_frame": { "type": "string" },
+        "calibrated": { "type": "boolean" },
+        "knowledge_reference": { "type": "string" },
+        "future_research": { "type": "string" },
+        "confidence_notes": { "type": "string" },
+        "correction_notes": { "type": "string" },
+        "extraction_type": {
+          "type": "string",
+          "enum": ["OBSERVED", "HEURISTIC", "INFERRED"]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "MEASURED",
+            "ESTIMATED",
+            "INFERRED",
+            "USER_PROVIDED",
+            "MISSING",
+            "OCCLUDED",
+            "NOT_APPLICABLE",
+            "REJECTED"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "status",
+        "extraction_type"
+      ]
+    },
+    "landmark": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "2d_source_coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "normalized_coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "estimated_3d_coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "source_image_id": { "type": "string" },
+        "source_view": { "type": "string" },
+        "confidence": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "status"
+      ]
+    },
+    "color_sample": {
+      "type": "object",
+      "properties": {
+        "raw_rgb": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "linear_rgb": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "cielab": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "median_color_hex": { "type": "string" },
+        "variance": { "type": "number" },
+        "sample_count": { "type": "integer" },
+        "source_image": { "type": "string" },
+        "source_view": { "type": "string" },
+        "lighting_normalized_status": { "type": "boolean" },
+        "confidence": { "type": "number" },
+        "delta_e_tolerance": { "type": "number" },
+        "extraction_type": {
+          "type": "string",
+          "enum": ["OBSERVED", "HEURISTIC", "INFERRED"]
+        },
+        "status": { "type": "string" }
+      },
+      "required": [
+        "median_color_hex",
+        "status",
+        "extraction_type"
+      ]
+    },
+    "structural_mask": {
+      "type": "object",
+      "properties": {
+        "file_path": { "type": "string" },
+        "hash_sha256": { "type": "string" },
+        "dimensions": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "source_image_id": { "type": "string" },
+        "source_view": { "type": "string" },
+        "coordinate_space": { "type": "string" },
+        "generation_method": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "protected_feature": {
+      "type": "object",
+      "properties": {
+        "feature_id": { "type": "string" },
+        "feature_type": { "type": "string" },
+        "anatomical_region": { "type": "string" },
+        "landmark_relative_coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "source_image_coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "source_view": { "type": "string" },
+        "dimensions": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "color": { "$ref": "#/$defs/color_sample" },
+        "confidence": { "type": "number" },
+        "source_evidence": { "type": "string" },
+        "preserve_by_default": { "type": "boolean" },
+        "creator_modification_status": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": [
+        "feature_id",
+        "feature_type",
+        "status",
+        "preserve_by_default"
+      ]
+    }
+  }
+}

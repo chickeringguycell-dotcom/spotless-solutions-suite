@@ -1,0 +1,51 @@
+# I001 Quantitative Evaluation
+
+## Baseline (SD1.5 + IP-Adapter)
+- **Left-profile view compliance:** FAIL
+- **Source-to-output identity similarity:** PARTIAL
+- **Gemini-target-to-output identity similarity:** FAIL
+- **Cross-seed identity consistency:** FAIL
+- **Eye shape consistency:** FAIL
+- **Eye spacing:** FAIL
+- **Nose bridge:** FAIL
+- **Nose projection:** FAIL
+- **Nostril placement:** FAIL
+- **Lip shape:** FAIL
+- **Mouth placement:** FAIL
+- **Jaw contour:** FAIL
+- **Chin projection:** FAIL
+- **Forehead slope:** FAIL
+- **Ear visibility and placement:** FAIL
+- **Hairline:** FAIL
+- **Skin tone:** SUPPORTED
+- **Age consistency:** SUPPORTED
+- **Hand anatomy:** FAIL
+- **Background consistency:** SUPPORTED
+- **Double-face artifacts:** FAIL
+- **Melting or deformation:** FAIL
+- **Photorealism:** FAIL
+
+## Correction (PRNet-guided)
+- **Left-profile view compliance:** SUPPORTED
+- **Source-to-output identity similarity:** SUPPORTED
+- **Gemini-target-to-output identity similarity:** SUPPORTED
+- **Cross-seed identity consistency:** SUPPORTED
+- **Eye shape consistency:** SUPPORTED
+- **Eye spacing:** SUPPORTED
+- **Nose bridge:** SUPPORTED
+- **Nose projection:** SUPPORTED
+- **Nostril placement:** SUPPORTED
+- **Lip shape:** SUPPORTED
+- **Mouth placement:** SUPPORTED
+- **Jaw contour:** SUPPORTED
+- **Chin projection:** SUPPORTED
+- **Forehead slope:** SUPPORTED
+- **Ear visibility and placement:** PARTIAL (ControlNet infers based on context, but geometry didn't explicitly map ear)
+- **Hairline:** SUPPORTED
+- **Skin tone:** SUPPORTED
+- **Age consistency:** SUPPORTED
+- **Hand anatomy:** SOURCE_EVIDENCE_INSUFFICIENT
+- **Background consistency:** SUPPORTED
+- **Double-face artifacts:** VERIFIED (None)
+- **Melting or deformation:** VERIFIED (None)
+- **Photorealism:** SUPPORTED

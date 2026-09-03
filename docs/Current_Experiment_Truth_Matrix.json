@@ -1,0 +1,33 @@
+{
+  "Experiment_011": {
+    "status": "EXECUTED_WITH_EVIDENCE",
+    "evidence": [
+      "Experiment_011_Workflow_A.json",
+      "Experiment_011_Workflow_B.json",
+      "Experiment_011_Workflow_C.json",
+      "Experiment_011_Baseline.json",
+      "Experiment_011_Report.md"
+    ]
+  },
+  "Experiment_012": {
+    "status": "EXECUTED_WITH_EVIDENCE",
+    "evidence": [
+      "Experiment_012_Primary_Workflow.json",
+      "Experiment_012_Mask_Effectiveness_Report.md"
+    ]
+  },
+  "Experiment_013": {
+    "status": "PARTIAL",
+    "evidence": [
+      "Experiment_013_Stage1_Attempt_8_Workflow.json",
+      "Experiment_013_Stage2_Workflow.json"
+    ],
+    "missing": [
+      "Experiment_013_Stage1_Provenance.json",
+      "Experiment_013_Stage1_SentinelQC.json",
+      "Experiment_013_Stage2_Provenance.json",
+      "Experiment_013_Stage2_SentinelQC.json"
+    ],
+    "note": "Previous execution lacked strict provenance and SentinelQC sidecars required for full execution evidence. Must be rerun autonomously."
+  }
+}

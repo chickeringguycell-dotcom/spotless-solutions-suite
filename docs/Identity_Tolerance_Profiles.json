@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "normalized_ratio_tolerance": {
+      "max_deviation": 0.05
+    },
+    "cielab_delta_e": {
+      "max_deviation": 5.0
+    },
+    "angular_tolerance": {
+      "max_deviation": 3.0
+    },
+    "categorical_exact_match": {
+      "max_deviation": 0.0
+    }
+  }
+}

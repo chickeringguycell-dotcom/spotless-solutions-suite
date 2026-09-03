@@ -1,0 +1,714 @@
+{
+  "LoadImage": {
+    "input": {
+      "required": {
+        "image": [
+          [
+            "canny_input (1).png",
+            "canny_input (2).png",
+            "canny_input (3).png",
+            "canny_input.png",
+            "control_target.png",
+            "example.png",
+            "flipped_left_hand_pose.png",
+            "girl_1_front.jpg",
+            "ipadapter_mask.png",
+            "ipadapter_source.jpg",
+            "real_left_hand.png",
+            "real_right_hand.png",
+            "smoke_test_ipadapter.jpg",
+            "test_photo.jpg",
+            "verified_left_hand.png",
+            "viper_morning_reference.png"
+          ],
+          {
+            "image_upload": true
+          }
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "image"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "IMAGE",
+      "MASK"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ],
+    "output_name": [
+      "IMAGE",
+      "MASK"
+    ],
+    "name": "LoadImage",
+    "display_name": "Load Image",
+    "description": "",
+    "python_module": "nodes",
+    "category": "image",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": [
+      "load image",
+      "open image",
+      "import image",
+      "image input",
+      "upload image",
+      "read image",
+      "image loader"
+    ],
+    "essentials_category": "Basics"
+  },
+  "VAEEncode": {
+    "input": {
+      "required": {
+        "pixels": [
+          "IMAGE"
+        ],
+        "vae": [
+          "VAE"
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "pixels",
+        "vae"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "LATENT"
+    ],
+    "name": "VAEEncode",
+    "display_name": "VAE Encode",
+    "description": "",
+    "python_module": "nodes",
+    "category": "model/latent",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": [
+      "encode",
+      "encode image",
+      "image to latent"
+    ]
+  },
+  "KSampler": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {
+            "tooltip": "The model used for denoising the input latent."
+          }
+        ],
+        "seed": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 18446744073709551615,
+            "control_after_generate": true,
+            "tooltip": "The random seed used for creating the noise."
+          }
+        ],
+        "steps": [
+          "INT",
+          {
+            "default": 20,
+            "min": 1,
+            "max": 10000,
+            "tooltip": "The number of steps used in the denoising process."
+          }
+        ],
+        "cfg": [
+          "FLOAT",
+          {
+            "default": 8.0,
+            "min": 0.0,
+            "max": 100.0,
+            "step": 0.1,
+            "round": 0.01,
+            "tooltip": "The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality."
+          }
+        ],
+        "sampler_name": [
+          [
+            "euler",
+            "euler_cfg_pp",
+            "euler_ancestral",
+            "euler_ancestral_cfg_pp",
+            "heun",
+            "heunpp2",
+            "exp_heun_2_x0",
+            "exp_heun_2_x0_sde",
+            "dpm_2",
+            "dpm_2_ancestral",
+            "lms",
+            "dpm_fast",
+            "dpm_adaptive",
+            "dpmpp_2s_ancestral",
+            "dpmpp_2s_ancestral_cfg_pp",
+            "dpmpp_sde",
+            "dpmpp_sde_gpu",
+            "dpmpp_2m",
+            "dpmpp_2m_cfg_pp",
+            "dpmpp_2m_sde",
+            "dpmpp_2m_sde_gpu",
+            "dpmpp_2m_sde_heun",
+            "dpmpp_2m_sde_heun_gpu",
+            "dpmpp_3m_sde",
+            "dpmpp_3m_sde_gpu",
+            "ddpm",
+            "lcm",
+            "ipndm",
+            "ipndm_v",
+            "deis",
+            "res_multistep",
+            "res_multistep_cfg_pp",
+            "res_multistep_ancestral",
+            "res_multistep_ancestral_cfg_pp",
+            "gradient_estimation",
+            "gradient_estimation_cfg_pp",
+            "er_sde",
+            "seeds_2",
+            "seeds_3",
+            "sa_solver",
+            "sa_solver_pece",
+            "ddim",
+            "uni_pc",
+            "uni_pc_bh2"
+          ],
+          {
+            "tooltip": "The algorithm used when sampling, this can affect the quality, speed, and style of the generated output."
+          }
+        ],
+        "scheduler": [
+          [
+            "simple",
+            "sgm_uniform",
+            "karras",
+            "exponential",
+            "ddim_uniform",
+            "beta",
+            "normal",
+            "linear_quadratic",
+            "kl_optimal"
+          ],
+          {
+            "tooltip": "The scheduler controls how noise is gradually removed to form the image."
+          }
+        ],
+        "positive": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to include in the image."
+          }
+        ],
+        "negative": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to exclude from the image."
+          }
+        ],
+        "latent_image": [
+          "LATENT",
+          {
+            "tooltip": "The latent image to denoise."
+          }
+        ],
+        "denoise": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.01,
+            "tooltip": "The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling."
+          }
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "model",
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "positive",
+        "negative",
+        "latent_image",
+        "denoise"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "LATENT"
+    ],
+    "name": "KSampler",
+    "display_name": "KSampler",
+    "description": "Uses the provided model, positive and negative conditioning to denoise the latent image.",
+    "python_module": "nodes",
+    "category": "model/sampling",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "output_tooltips": [
+      "The denoised latent."
+    ],
+    "search_aliases": [
+      "sampler",
+      "sample",
+      "generate",
+      "denoise",
+      "diffuse",
+      "txt2img",
+      "img2img"
+    ]
+  },
+  "VAEDecode": {
+    "input": {
+      "required": {
+        "samples": [
+          "LATENT",
+          {
+            "tooltip": "The latent to be decoded."
+          }
+        ],
+        "vae": [
+          "VAE",
+          {
+            "tooltip": "The VAE model used for decoding the latent."
+          }
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "samples",
+        "vae"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "IMAGE"
+    ],
+    "name": "VAEDecode",
+    "display_name": "VAE Decode",
+    "description": "Decodes latent images back into pixel space images.",
+    "python_module": "nodes",
+    "category": "model/latent",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "output_tooltips": [
+      "The decoded image."
+    ],
+    "search_aliases": [
+      "decode",
+      "decode latent",
+      "latent to image",
+      "render latent"
+    ]
+  },
+  "ControlNetLoader": {
+    "input": {
+      "required": {
+        "control_net_name": [
+          [
+            "control_v11f1p_sd15_depth.pth",
+            "control_v11p_sd15_canny.pth",
+            "control_v11p_sd15_openpose.pth",
+            "sdxl_depth.safetensors",
+            "sdxl_openpose.safetensors"
+          ]
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "control_net_name"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "CONTROL_NET"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "CONTROL_NET"
+    ],
+    "name": "ControlNetLoader",
+    "display_name": "Load ControlNet Model",
+    "description": "",
+    "python_module": "nodes",
+    "category": "model/loaders",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": [
+      "controlnet",
+      "control net",
+      "cn",
+      "load controlnet",
+      "controlnet loader"
+    ]
+  },
+  "ControlNetApply": {
+    "input": {
+      "required": {
+        "conditioning": [
+          "CONDITIONING"
+        ],
+        "control_net": [
+          "CONTROL_NET"
+        ],
+        "image": [
+          "IMAGE"
+        ],
+        "strength": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 10.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "conditioning",
+        "control_net",
+        "image",
+        "strength"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "CONDITIONING"
+    ],
+    "name": "ControlNetApply",
+    "display_name": "Apply ControlNet (DEPRECATED)",
+    "description": "",
+    "python_module": "nodes",
+    "category": "model/conditioning/controlnet",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "deprecated": true,
+    "search_aliases": []
+  },
+  "ControlNetApplyAdvanced": {
+    "input": {
+      "required": {
+        "positive": [
+          "CONDITIONING"
+        ],
+        "negative": [
+          "CONDITIONING"
+        ],
+        "control_net": [
+          "CONTROL_NET"
+        ],
+        "image": [
+          "IMAGE"
+        ],
+        "strength": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 10.0,
+            "step": 0.01
+          }
+        ],
+        "start_percent": [
+          "FLOAT",
+          {
+            "default": 0.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.001
+          }
+        ],
+        "end_percent": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.001
+          }
+        ]
+      },
+      "optional": {
+        "vae": [
+          "VAE"
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "positive",
+        "negative",
+        "control_net",
+        "image",
+        "strength",
+        "start_percent",
+        "end_percent"
+      ],
+      "optional": [
+        "vae"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "CONDITIONING",
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ],
+    "output_name": [
+      "positive",
+      "negative"
+    ],
+    "name": "ControlNetApplyAdvanced",
+    "display_name": "Apply ControlNet",
+    "description": "",
+    "python_module": "nodes",
+    "category": "model/conditioning/controlnet",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": [
+      "controlnet",
+      "apply controlnet",
+      "use controlnet",
+      "control net"
+    ]
+  },
+  "IPAdapterAdvanced": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL"
+        ],
+        "ipadapter": [
+          "IPADAPTER"
+        ],
+        "image": [
+          "IMAGE"
+        ],
+        "weight": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": -1,
+            "max": 5,
+            "step": 0.05
+          }
+        ],
+        "weight_type": [
+          [
+            "linear",
+            "ease in",
+            "ease out",
+            "ease in-out",
+            "reverse in-out",
+            "weak input",
+            "weak output",
+            "weak middle",
+            "strong middle",
+            "style transfer",
+            "composition",
+            "strong style transfer",
+            "style and composition",
+            "style transfer precise",
+            "composition precise"
+          ]
+        ],
+        "combine_embeds": [
+          [
+            "concat",
+            "add",
+            "subtract",
+            "average",
+            "norm average"
+          ]
+        ],
+        "start_at": [
+          "FLOAT",
+          {
+            "default": 0.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.001
+          }
+        ],
+        "end_at": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.001
+          }
+        ],
+        "embeds_scaling": [
+          [
+            "V only",
+            "K+V",
+            "K+V w/ C penalty",
+            "K+mean(V) w/ C penalty"
+          ]
+        ]
+      },
+      "optional": {
+        "image_negative": [
+          "IMAGE"
+        ],
+        "attn_mask": [
+          "MASK"
+        ],
+        "clip_vision": [
+          "CLIP_VISION"
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "model",
+        "ipadapter",
+        "image",
+        "weight",
+        "weight_type",
+        "combine_embeds",
+        "start_at",
+        "end_at",
+        "embeds_scaling"
+      ],
+      "optional": [
+        "image_negative",
+        "attn_mask",
+        "clip_vision"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "MODEL"
+    ],
+    "name": "IPAdapterAdvanced",
+    "display_name": "IPAdapter Advanced",
+    "description": "",
+    "python_module": "custom_nodes.ComfyUI_IPAdapter_plus",
+    "category": "ipadapter",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": []
+  },
+  "IPAdapterModelLoader": {
+    "input": {
+      "required": {
+        "ipadapter_file": [
+          [
+            "ip-adapter_sd15.bin"
+          ]
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "ipadapter_file"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "IPADAPTER"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "IPADAPTER"
+    ],
+    "name": "IPAdapterModelLoader",
+    "display_name": "IPAdapter Model Loader",
+    "description": "",
+    "python_module": "custom_nodes.ComfyUI_IPAdapter_plus",
+    "category": "ipadapter/loaders",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": []
+  },
+  "CLIPVisionLoader": {
+    "input": {
+      "required": {
+        "clip_name": [
+          [
+            "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+          ]
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "clip_name"
+      ]
+    },
+    "is_input_list": false,
+    "output": [
+      "CLIP_VISION"
+    ],
+    "output_is_list": [
+      false
+    ],
+    "output_name": [
+      "CLIP_VISION"
+    ],
+    "name": "CLIPVisionLoader",
+    "display_name": "Load CLIP Vision",
+    "description": "",
+    "python_module": "nodes",
+    "category": "model/loaders",
+    "output_node": false,
+    "has_intermediate_output": false,
+    "search_aliases": []
+  }
+}

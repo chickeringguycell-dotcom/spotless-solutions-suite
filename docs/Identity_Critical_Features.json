@@ -1,0 +1,11 @@
+{
+  "features": [
+    "eye_spacing",
+    "eye_width",
+    "nose_width",
+    "jaw_width",
+    "skin_left_cheek",
+    "freckles"
+  ],
+  "enforcement": "A failure on any critical feature immediately rejects the candidate."
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Provider Capability Declaration",
+  "type": "object",
+  "required": ["provider_id", "version", "supported_inputs", "max_resolution"],
+  "properties": {
+    "provider_id": { "type": "string" },
+    "version": { "type": "string" },
+    "supported_inputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "TEXT_PROMPT", "IMAGE_PROMPT", 
+          "CONTROLNET_CANNY", "CONTROLNET_DEPTH", "CONTROLNET_LANDMARKS", 
+          "INPAINT_MASK"
+        ]
+      }
+    },
+    "max_resolution": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" }
+      },
+      "required": ["width", "height"]
+    },
+    "supported_aspect_ratios": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

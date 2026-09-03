@@ -1,0 +1,65 @@
+{
+  "source_observed_attributes": [
+    "Face identity",
+    "Eyes",
+    "Eye spacing",
+    "Nose",
+    "Lips",
+    "Mouth",
+    "Jaw",
+    "Chin",
+    "Forehead",
+    "Hairline",
+    "Skin tone",
+    "Apparent age",
+    "Visible hair (front)",
+    "Visible clothing (collar/shoulders)"
+  ],
+  "inferred_attributes": [
+    "Side of face",
+    "Ears",
+    "Rear skull",
+    "Back of hair",
+    "Neck sides",
+    "Shoulders",
+    "Torso",
+    "Arms",
+    "Hands",
+    "Hips",
+    "Legs",
+    "Feet",
+    "Overall Height",
+    "Body shape",
+    "Clothing below visible crop",
+    "Rear clothing construction"
+  ],
+  "camera_definitions": {
+    "front": "0 deg, 0 deg elevation",
+    "left_profile": "-90 deg, 0 deg elevation",
+    "right_profile": "90 deg, 0 deg elevation",
+    "left_three_quarter": "-45 deg, 0 deg elevation",
+    "right_three_quarter": "45 deg, 0 deg elevation",
+    "rear_three_quarter": "135 deg, 0 deg elevation",
+    "rear": "180 deg, 0 deg elevation"
+  },
+  "body_proportion_assumptions": "Plausible average athletic build, matching apparent age of the source.",
+  "hair_assumptions": "Hair pulled back smoothly, matching front hairline tension.",
+  "clothing_assumptions": "Fitted sci-fi/casual suit matching the visible collar.",
+  "confidence_per_region": {
+    "Face Center": "HIGH",
+    "Forehead": "HIGH",
+    "Chin": "HIGH",
+    "Cheeks": "HIGH",
+    "Side of Head": "MEDIUM",
+    "Ears": "LOW",
+    "Back of Head": "LOW",
+    "Torso": "PROVISIONAL",
+    "Limbs": "PROVISIONAL",
+    "Feet": "PROVISIONAL"
+  },
+  "seed_and_model_information": {
+    "seed": 400,
+    "model": "SD1.5 + ControlNet (Depth/Canny) + IP-Adapter"
+  },
+  "cross_view_consistency_results": "PENDING VALIDATION"
+}

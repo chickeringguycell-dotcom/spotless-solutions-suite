@@ -1,0 +1,467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "rules": [
+    {
+      "verification_rule_id": "RULE_EYE_SPACING",
+      "measurement_name": "eye_spacing",
+      "description": "Distance between pupils relative to face width",
+      "source_field_path": "geometric_measurements.inter_landmark_distances.eye_spacing",
+      "output_measurement_method": "normalized_distance",
+      "units": "normalized_ratio",
+      "coordinate_frame": "normalized_face_box",
+      "tolerance_type": "normalized_ratio_tolerance",
+      "confidence_requirement": 0.85,
+      "criticality": "CRITICAL",
+      "failure_code": "ERR_EYE_SPACING_OUT_OF_BOUNDS",
+      "responsible_correction_station": "Photo_Generator",
+      "valid_views": [
+        "FRONTAL"
+      ]
+    },
+    {
+      "verification_rule_id": "RULE_SKIN_COLOR_CHEEK",
+      "measurement_name": "skin_left_cheek_color",
+      "description": "Perceptual color check of the left cheek",
+      "source_field_path": "color_samples.skin_left_cheek",
+      "output_measurement_method": "cielab_median",
+      "units": "cielab",
+      "coordinate_frame": "none",
+      "tolerance_type": "cielab_delta_e",
+      "confidence_requirement": 0.8,
+      "criticality": "CRITICAL",
+      "failure_code": "ERR_SKIN_TONE_DRIFT",
+      "responsible_correction_station": "Photo_Generator",
+      "valid_views": [
+        "FRONTAL",
+        "PROFILE",
+        "THREE_QUARTER"
+      ]
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_FOREHEAD_SLOPE",
+      "description": "Angular slope of the forehead relative to vertical",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "forehead_top",
+        "glabella"
+      ],
+      "mathematical_definition": "angular_deviation",
+      "normalization_basis": "vertical_axis",
+      "tolerance": 5.0,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "forehead_slope",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_NOSE_BRIDGE_ANGLE",
+      "description": "Angle of the nasal bridge",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "nasion",
+        "pronasale"
+      ],
+      "mathematical_definition": "angular_deviation",
+      "normalization_basis": "vertical_axis",
+      "tolerance": 5.0,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "nose_bridge",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_NOSE_PROJECTION",
+      "description": "Projection of nose tip relative to facial plane",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "pronasale",
+        "subnasale",
+        "nasion"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.05,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "nose_tip",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_NOSTRIL_POSITION",
+      "description": "Position of the nostril relative to nose tip",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "alar",
+        "pronasale"
+      ],
+      "mathematical_definition": "centroid_displacement",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.05,
+      "severity": "HIGH",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "nostril",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_UPPER_LIP_PROJECTION",
+      "description": "Projection of upper lip",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "labiale_superius",
+        "subnasale"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.05,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "upper_lip",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_LOWER_LIP_PROJECTION",
+      "description": "Projection of lower lip",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "labiale_inferius",
+        "sublabiale"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.05,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "lower_lip",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_CHIN_PROJECTION",
+      "description": "Projection of chin",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "pogonion",
+        "gnathion"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.05,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "chin",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_JAW_CONTOUR",
+      "description": "Shape of the jawline",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "gonion",
+        "gnathion"
+      ],
+      "mathematical_definition": "normalized_hausdorff",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.1,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "jawline",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_MANDIBULAR_ANGLE",
+      "description": "Angle of the jaw",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "gonion",
+        "gnathion",
+        "condylion"
+      ],
+      "mathematical_definition": "angular_deviation",
+      "normalization_basis": "none",
+      "tolerance": 10.0,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.7,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "jaw_angle",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_EAR_POSITION",
+      "description": "Position of the ear",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "tragion"
+      ],
+      "mathematical_definition": "centroid_displacement",
+      "normalization_basis": "ear_to_nose_distance",
+      "tolerance": 0.1,
+      "severity": "HIGH",
+      "confidence_threshold": 0.6,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "ear_position",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_EAR_HEIGHT",
+      "description": "Height of the ear",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "superaurale",
+        "subaurale"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.1,
+      "severity": "HIGH",
+      "confidence_threshold": 0.6,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "ear_height",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_EAR_WIDTH",
+      "description": "Width of the ear",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "tragion",
+        "postaurale"
+      ],
+      "mathematical_definition": "projection_ratio",
+      "normalization_basis": "ear_to_nose_distance",
+      "tolerance": 0.1,
+      "severity": "MEDIUM",
+      "confidence_threshold": 0.6,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "ear_width",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_HAIRLINE",
+      "description": "Profile hairline contour",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "trichion",
+        "frontotemporale"
+      ],
+      "mathematical_definition": "curve_shape_similarity",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.15,
+      "severity": "MEDIUM",
+      "confidence_threshold": 0.5,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "hairline",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_SKULL_SILHOUETTE",
+      "description": "Cranial vault silhouette",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "vertex",
+        "opisthocranion"
+      ],
+      "mathematical_definition": "normalized_hausdorff",
+      "normalization_basis": "cranial_height",
+      "tolerance": 0.15,
+      "severity": "HIGH",
+      "confidence_threshold": 0.5,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "skull",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_NECK_TRANSITION",
+      "description": "Neck to jaw transition",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "cervicale",
+        "gnathion"
+      ],
+      "mathematical_definition": "curve_shape_similarity",
+      "normalization_basis": "jaw_length",
+      "tolerance": 0.15,
+      "severity": "MEDIUM",
+      "confidence_threshold": 0.7,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "neck",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_SKIN_COLOR",
+      "description": "Profile skin color consistency",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "cheek",
+        "temple",
+        "neck"
+      ],
+      "mathematical_definition": "cielab_delta_e",
+      "normalization_basis": "none",
+      "tolerance": 5.0,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.8,
+      "missing_data_behavior": "NOT_MEASURED",
+      "correction_target": "skin_color",
+      "responsible_station": "Photo_Generator"
+    },
+    {
+      "verification_rule_id": "RULE_PROFILE_PROTECTED_ASYMMETRY",
+      "description": "Preservation of intended asymmetry (scars, moles)",
+      "valid_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE"
+      ],
+      "required_source_views": [
+        "LEFT_PROFILE",
+        "RIGHT_PROFILE",
+        "FRONTAL"
+      ],
+      "required_landmarks": [
+        "protected_features"
+      ],
+      "mathematical_definition": "boolean_presence",
+      "normalization_basis": "none",
+      "tolerance": 0.0,
+      "severity": "CRITICAL",
+      "confidence_threshold": 0.9,
+      "missing_data_behavior": "SOURCE_EVIDENCE_INSUFFICIENT",
+      "correction_target": "asymmetry",
+      "responsible_station": "Photo_Generator"
+    }
+  ]
+}

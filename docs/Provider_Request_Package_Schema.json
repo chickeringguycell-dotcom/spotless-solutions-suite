@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Provider Request Package",
+  "type": "object",
+  "required": [
+    "request_id",
+    "timestamp",
+    "identity_conditioning_hash",
+    "camera_geometry_hash",
+    "provider_id",
+    "provider_model",
+    "translated_prompt",
+    "translated_controls"
+  ],
+  "properties": {
+    "request_id": { "type": "string" },
+    "timestamp": { "type": "string" },
+    "identity_conditioning_hash": { "type": "string" },
+    "camera_geometry_hash": { "type": "string" },
+    "provider_id": { "type": "string" },
+    "provider_model": { "type": "string" },
+    "translated_prompt": { "type": "string" },
+    "translated_controls": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

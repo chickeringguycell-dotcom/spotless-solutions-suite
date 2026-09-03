@@ -1,0 +1,55 @@
+{
+  "graph": {
+    "eye_spacing": {
+      "affects": [
+        "facial_width",
+        "eyebrow_spacing",
+        "nose_bridge",
+        "orbital_proportions"
+      ]
+    },
+    "temple_width": {
+      "affects": [
+        "facial_width",
+        "jaw_width_ratio",
+        "head_silhouette",
+        "hair_volume_baseline"
+      ]
+    },
+    "nose_projection": {
+      "affects": [
+        "profile_identity",
+        "lip_projection",
+        "chin_balance",
+        "philtrum_angle"
+      ]
+    },
+    "hair_curl": {
+      "affects": [
+        "hair_volume",
+        "head_silhouette",
+        "specularity_breakup"
+      ]
+    },
+    "pore_density": {
+      "affects": [
+        "skin_roughness",
+        "specularity_spread",
+        "perceived_age",
+        "micro_wrinkles"
+      ]
+    },
+    "facial_width": {
+      "affects": [
+        "head_silhouette",
+        "overall_proportions"
+      ]
+    },
+    "hairline": {
+      "affects": [
+        "forehead_height",
+        "skull_silhouette"
+      ]
+    }
+  }
+}

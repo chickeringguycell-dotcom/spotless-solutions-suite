@@ -1,0 +1,51 @@
+{
+  "audit_version": "1.0",
+  "workflow_nodes": [
+    {"id": "4", "type": "CheckpointLoaderSimple", "output": "Model, CLIP, VAE"},
+    {"id": "6", "type": "CLIPTextEncode (Positive)", "input": "CLIP, Text", "output": "Conditioning"},
+    {"id": "7", "type": "CLIPTextEncode (Negative)", "input": "CLIP, Text", "output": "Conditioning"},
+    {"id": "10", "type": "LoadImage (Control)", "output": "Image"},
+    {"id": "11", "type": "ControlNetLoader", "output": "ControlNet"},
+    {"id": "12", "type": "ControlNetApply", "input": "Conditioning (6), ControlNet (11), Image (10)", "output": "Conditioning"},
+    {"id": "13", "type": "LoadImage (IP-Adapter Source)", "output": "Image"},
+    {"id": "14", "type": "IPAdapterModelLoader", "output": "IPAdapter"},
+    {"id": "16", "type": "CLIPVisionLoader", "output": "CLIP_VISION"},
+    {"id": "15", "type": "IPAdapterAdvanced", "input": "Model (4), IPAdapter (14), Image (13), CLIP_VISION (16)", "output": "Model"},
+    {"id": "5", "type": "EmptyLatentImage", "output": "Latent"},
+    {"id": "3", "type": "KSampler", "input": "Model (15), Positive (12), Negative (7), Latent (5)"}
+  ],
+  "node_execution_order": [
+    "CheckpointLoaderSimple",
+    "EmptyLatentImage",
+    "CLIPTextEncode (Negative)",
+    "CLIPTextEncode (Positive)",
+    "LoadImage (Control)",
+    "ControlNetLoader",
+    "ControlNetApply",
+    "LoadImage (IP-Adapter Source)",
+    "IPAdapterModelLoader",
+    "CLIPVisionLoader",
+    "IPAdapterAdvanced",
+    "KSampler",
+    "VAEDecode",
+    "SaveImage"
+  ],
+  "routing_analysis": {
+    "model_reaches_ksampler": "IPAdapterAdvanced (15)",
+    "positive_conditioning_reaches_ksampler": "ControlNetApply (12)",
+    "negative_conditioning_reaches_ksampler": "CLIPTextEncode (7)",
+    "ip_adapter_modification": "IPAdapter intercepts and modifies the UNet Model. It does NOT touch Text Conditioning.",
+    "controlnet_modification": "ControlNet intercepts and modifies the Positive Text Conditioning. It does NOT touch the Model or Negative Conditioning."
+  },
+  "preprocessing": {
+    "source_portrait": "None. Raw LoadImage -> IPAdapterAdvanced",
+    "control_image": "None. Raw LoadImage -> ControlNetApply",
+    "resize_behavior": "Latent space is 512x512. Images are unscaled by the API before injection, relying on node defaults."
+  },
+  "parameters": {
+    "ip_adapter_weight": 1.0,
+    "ip_adapter_starts": 0.0,
+    "ip_adapter_ends": 1.0,
+    "controlnet_strength": 1.0
+  }
+}

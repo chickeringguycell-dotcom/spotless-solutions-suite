@@ -1,0 +1,69 @@
+{
+  "attributes": {
+    "eye_spacing": {
+      "definition": "The horizontal distance between the inner canthus of the left and right eyes.",
+      "engineering_purpose": "Defines the core horizontal center-balance of the upper face, anchoring the visual identity.",
+      "mathematical_definition": "Euclidean distance between MediaPipe landmark 133 and 362, normalized to temple width.",
+      "extraction_algorithm": "3D Euclidean distance calculation derived from normalized 478-point mesh coordinates.",
+      "confidence_interpretation": "Requires highly visible, non-occluded inner eyes. Drops significantly in profile views.",
+      "failure_conditions": "Heavy shadows around the nose bridge, thick glasses frames obscuring the canthus, extreme profile yaw.",
+      "relationship_to_neighboring": "Acts as the baseline divider for facial_width and directly influences the perceived width of the nose bridge.",
+      "dependencies": ["inner_eye_left", "inner_eye_right"],
+      "correction_strategy": "If confidence < 0.5, attempt to infer from contralateral symmetry if a 3/4 profile exists. Otherwise, flag for manual review.",
+      "provider_sensitivity": "High sensitivity in Stable Diffusion 3.5; often collapses if eyes are too close together.",
+      "future_research_required": "Need better distinction between epicanthic folds and true canthus points across diverse ethnicities."
+    },
+    "temple_width": {
+      "definition": "The horizontal distance between the left and right temporal bones (widest part of the upper skull).",
+      "engineering_purpose": "Establishes the absolute maximum width constraint of the skull for generative bounding boxes.",
+      "mathematical_definition": "Euclidean distance between MediaPipe landmark 162 and 389.",
+      "extraction_algorithm": "Maximum horizontal span calculation on the coronal plane.",
+      "confidence_interpretation": "Requires frontal or near-frontal view. Drops to 0 in pure profile views.",
+      "failure_conditions": "Heavy bangs or voluminous hair covering the temples causes the mesh to hallucinate the bone structure underneath.",
+      "relationship_to_neighboring": "Used as the normalization denominator for almost all internal facial ratios (e.g., eye_spacing / temple_width).",
+      "dependencies": ["left_temple", "right_temple"],
+      "correction_strategy": "If occluded by hair, fall back to cheekbone width + estimated temporal offset based on demographic priors.",
+      "provider_sensitivity": "Medium. Most models get generic skull width correct, but struggle with precise width-to-height ratios without LoRA.",
+      "future_research_required": "Researching Depth-Anything integration to penetrate hair occlusion and find true temporal depth."
+    },
+    "nose_projection": {
+      "definition": "The forward Z-axis depth from the alar base to the tip of the nose.",
+      "engineering_purpose": "Crucial for profile silhouette accuracy and lighting (shadow casting).",
+      "mathematical_definition": "Delta Z between the pronasale (tip) and the subnasale (base).",
+      "extraction_algorithm": "Z-axis depth isolation from the 3D local coordinate frame of the face mesh.",
+      "confidence_interpretation": "Highest in profile views. Extremely low in flatly-lit frontal views due to loss of depth cues.",
+      "failure_conditions": "Direct frontal flash photography destroys the shading required for the monocular depth estimator to infer Z-axis projection.",
+      "relationship_to_neighboring": "Heavily influences the perceived lip_projection and profile_identity.",
+      "dependencies": ["pronasale", "subnasale"],
+      "correction_strategy": "Force extraction from a PROFILE_LEFT or PROFILE_RIGHT view. Do not trust FRONTAL Z-axis estimations.",
+      "provider_sensitivity": "Very High. AI models frequently flatten noses or mutate them into generic button noses without strong depth conditioning.",
+      "future_research_required": "Integration of stereo photogrammetry or explicit 3D Gaussian Splatting for true volumetric measurement."
+    },
+    "hair_curl": {
+      "definition": "The textural classification of hair wave frequency (straight, wavy, curly, coily).",
+      "engineering_purpose": "Drives the textural conditioning and prompt formulation for hair generation.",
+      "mathematical_definition": "The standard deviation of Laplacian variance within the segmented hair region mask.",
+      "extraction_algorithm": "Canny edge detection over the hair mask, followed by frequency domain analysis to count edge inversions per square inch.",
+      "confidence_interpretation": "Requires high-resolution, sharply focused inputs. Drops to 0 on blurry or low-res images.",
+      "failure_conditions": "Motion blur, low resolution, or highly specular lighting hitting dark hair destroys the edge detection.",
+      "relationship_to_neighboring": "Affects the overall silhouette volume of the head.",
+      "dependencies": ["hair_segmentation_mask"],
+      "correction_strategy": "If confidence < 0.6 due to blur, classify as INFERRED based on global image prompt context, or leave as MISSING.",
+      "provider_sensitivity": "High. Generators struggle with precise coily hair, often smoothing it into generic waves.",
+      "future_research_required": "Need a dedicated Neural Texture Classifier trained specifically on the Andre Walker Hair Typing System."
+    },
+    "pore_density": {
+      "definition": "The frequency and depth of visible pores on the skin surface (primarily cheeks and nose).",
+      "engineering_purpose": "Prevents the 'plastic' AI look by enforcing realistic skin imperfections.",
+      "mathematical_definition": "High-frequency noise calculation over a color-normalized skin patch.",
+      "extraction_algorithm": "Isolate the cheek patch, apply CLAHE (Contrast Limited Adaptive Histogram Equalization), and measure high-frequency variance.",
+      "confidence_interpretation": "Extremely dependent on megapixel count. Meaningless on images below 1080p.",
+      "failure_conditions": "Heavy makeup, severe jpeg compression, or low-resolution completely erases pores.",
+      "relationship_to_neighboring": "Informs the generation of micro-wrinkles and specularity mapping.",
+      "dependencies": ["cheek_patch_left", "cheek_patch_right"],
+      "correction_strategy": "If resolution is too low, default to HEURISTIC average for the subject's estimated age group.",
+      "provider_sensitivity": "High. FLUX.2 tends to over-smooth unless explicitly forced by a high-frequency LoRA.",
+      "future_research_required": "Differentiating between true pores and jpeg artifacting at a sub-pixel level."
+    }
+  }
+}

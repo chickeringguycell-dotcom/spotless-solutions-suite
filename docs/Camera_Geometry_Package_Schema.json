@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Camera Geometry Package",
+  "type": "object",
+  "required": [
+    "package_id",
+    "schema_version",
+    "parent_conditioning_hash",
+    "requested_view",
+    "camera_parameters",
+    "framing",
+    "transformed_landmarks",
+    "control_outputs",
+    "provenance",
+    "output_hash"
+  ],
+  "properties": {
+    "package_id": { "type": "string" },
+    "schema_version": { "type": "string", "const": "1.0" },
+    "parent_conditioning_hash": { "type": "string" },
+    "requested_view": {
+      "type": "string",
+      "enum": [
+        "FRONTAL", "LEFT_PROFILE", "RIGHT_PROFILE",
+        "THREE_QUARTER_LEFT", "THREE_QUARTER_RIGHT",
+        "REAR_HEAD", "FULL_BODY_FRONT", "FULL_BODY_SIDE", "FULL_BODY_REAR"
+      ]
+    },
+    "camera_parameters": {
+      "type": "object",
+      "properties": {
+        "yaw": { "type": "number" },
+        "pitch": { "type": "number" },
+        "roll": { "type": "number" }
+      }
+    },
+    "framing": {
+      "type": "object",
+      "properties": {
+        "crop_bounds": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "output_dimensions": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "transformed_landmarks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "z": { "type": "number" },
+          "status": {
+            "type": "string",
+            "enum": ["MEASURED", "PROJECTED", "ESTIMATED", "INFERRED", "OCCLUDED", "NOT_VISIBLE", "MISSING"]
+          }
+        }
+      }
+    },
+    "view_aware_rules": {
+      "type": "object",
+      "properties": {
+        "visible_landmarks": { "type": "array", "items": { "type": "string" } },
+        "hidden_landmarks": { "type": "array", "items": { "type": "string" } },
+        "required_profile_measurements": { "type": "array", "items": { "type": "string" } },
+        "measurements_invalid_for_view": { "type": "array", "items": { "type": "string" } },
+        "expected_ear_visibility": { "type": "boolean" },
+        "expected_nose_projection": { "type": "boolean" },
+        "expected_jaw_silhouette": { "type": "boolean" },
+        "expected_hairline": { "type": "boolean" }
+      }
+    },
+    "control_outputs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "file_path": { "type": "string" },
+          "hash": { "type": "string" },
+          "dimensions": {
+            "type": "array",
+            "items": { "type": "integer" }
+          },
+          "coordinate_space": { "type": "string" },
+          "generation_method": { "type": "string" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "generator_version": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    },
+    "output_hash": { "type": "string" }
+  }
+}

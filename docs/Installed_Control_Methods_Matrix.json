@@ -1,0 +1,15 @@
+{
+  "installed_preprocessors": [
+    "comfyui_controlnet_aux"
+  ],
+  "installed_checkpoints": [
+    "control_v11p_sd15_openpose.pth",
+    "control_v11p_sd15_canny.pth",
+    "control_v11f1p_sd15_depth.pth",
+    "sdxl_depth.safetensors",
+    "sdxl_openpose.safetensors"
+  ],
+  "control_path_decision": "VERIFIED ALTERNATIVE CONTROL PATH",
+  "selected_checkpoint": "control_v11p_sd15_canny.pth",
+  "rationale": "Station 7C mathematically derives landmarks and lacks an input image for a preprocessor to analyze. Generating a true OpenPose image requires complex RGB heatmap coloring that is undocumented locally. Generating a Canny edge map is mathematically trivial (white lines on black background). We will use the canonical landmarks to draw a profile line-art silhouette and feed it to the Canny ControlNet."
+}

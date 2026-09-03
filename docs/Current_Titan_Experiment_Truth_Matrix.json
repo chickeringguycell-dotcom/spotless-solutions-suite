@@ -1,0 +1,36 @@
+{
+  "Experiment_011": {
+    "status": "EXECUTED_WITH_COMPLETE_EVIDENCE",
+    "evidence": [
+      "Experiment_011_Workflow_A.json",
+      "Experiment_011_Baseline.json",
+      "Experiment_011_Report.md"
+    ]
+  },
+  "Experiment_012": {
+    "status": "EXECUTED_WITH_COMPLETE_EVIDENCE",
+    "evidence": [
+      "Experiment_012_Primary_Workflow.json",
+      "Experiment_012_Mask_Effectiveness_Report.md"
+    ]
+  },
+  "Experiment_013": {
+    "status": "EXECUTED_WITH_COMPLETE_EVIDENCE",
+    "evidence": [
+      "Experiment_013_Stage1_Workflow.json",
+      "Experiment_013_Stage1_Provenance.json",
+      "Experiment_013_Stage1_SentinelQC.json",
+      "Experiment_013_Stage2_Primary_Workflow.json",
+      "Experiment_013_Stage2_Primary_Provenance.json",
+      "Experiment_013_Stage2_Primary_SentinelQC.json",
+      "Experiment_013_Stage2_R2_Workflow.json",
+      "Experiment_013_Stage2_R2_Provenance.json",
+      "Experiment_013_Stage2_R2_SentinelQC.json",
+      "Experiment_013_Report.md"
+    ]
+  },
+  "Experiment_014": {
+    "status": "NOT_IMPLEMENTED",
+    "evidence": []
+  }
+}
