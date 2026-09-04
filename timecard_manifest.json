@@ -1,0 +1,25 @@
+{
+  "name": "Spotless Timecard",
+  "short_name": "SOS Timecard",
+  "description": "Mobile Geofenced Cleaner Timecard - Spotless Office Solutions LLC",
+  "start_url": "./timecard.html?v=115",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0f",
+  "theme_color": "#18181b",
+  "icons": [
+    {
+      "src": "icon-192-tc.png?v=115",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512-tc.png?v=115",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
