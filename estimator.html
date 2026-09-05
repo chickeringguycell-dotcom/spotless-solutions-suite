@@ -860,15 +860,15 @@
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <img src="apple-touch-icon.png" style="width: 50px; height: 50px; border-radius: 8px;">
                   <div>
-                    <div style="font-size: 20px; font-weight: 900; color: #0F172A; letter-spacing: -0.5px;">SPOTLESS OFFICE SOLUTIONS</div>
-                    <div style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 1px;">Commercial Janitorial Services & Facility Care</div>
+                    <div style="font-size: 20px; font-weight: 900; color: #0F172A; letter-spacing: -0.5px;">COMMERCIAL CLEANING & JANITORIAL</div>
+                    <div style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 1px;">Professional Commercial Janitorial Services</div>
                     <div style="font-size: 10px; color: #475569; margin-top: 2px;">
-                      <b>Owners:</b> Guy Chickering & Jacquise Arrington • <b>Phone:</b> (206) 578-0727 • <b>Email:</b> sos.estimator@outlook.com
+                      <b>Authorized Service Provider</b> • Standard Commercial Proposal & Agreement
                     </div>
                   </div>
                 </div>
                 <div style="text-align: right; font-size: 11px; color: #475569; line-height: 1.4;">
-                  <div><b>Proposal Ref:</b> <span id="doc-prop-id" style="color: #0F172A; font-weight: 800;">SOS-2026-8500</span></div>
+                  <div><b>Proposal Ref:</b> <span id="doc-prop-id" style="color: #0F172A; font-weight: 800;">PROP-2026-8500</span></div>
                   <div><b>Date:</b> <span id="doc-prop-date">September 1, 2026</span></div>
                   <div><b>Valid For:</b> 30 Days</div>
                 </div>
@@ -1158,22 +1158,20 @@
                   </div>
                 </div>
 
-                <!-- Spotless Office Solutions Signature Block -->
+                <!-- Service Provider Signature Block -->
                 <div style="border-top: 2px solid #D4AF37; padding-top: 10px;">
-                  <div style="font-size: 12px; font-weight: 900; color: #B45309; text-transform: uppercase; margin-bottom: 6px;">SPOTLESS OFFICE SOLUTIONS (AUTHORIZED)</div>
+                  <div style="font-size: 12px; font-weight: 900; color: #B45309; text-transform: uppercase; margin-bottom: 6px;">SERVICE PROVIDER (AUTHORIZED REPRESENTATIVE)</div>
                   
-                  <!-- Separate Signature Lines for Guy and Jacquise -->
+                  <!-- Signature Line for Contractor -->
                   <div style="height: 50px; display: flex; align-items: flex-end; gap: 16px; margin-bottom: 6px;">
-                    <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 21px; color: #0F172A; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 2px;">Guy Chickering</div>
-                    <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 21px; color: #0F172A; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 2px;">Jacquise Arrington</div>
+                    <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 21px; color: #0F172A; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 2px; min-width: 170px;">Authorized Representative</div>
                   </div>
 
                   <div style="font-size: 10.5px; color: #334155; line-height: 1.5;">
-                    <div><b>Owner / Managing Director:</b> Guy Chickering</div>
-                    <div><b>Co-Owner / Operations Lead:</b> Jacquise Arrington</div>
-                    <div><b>Direct Phone:</b> (206) 578-0727</div>
-                    <div><b>Direct Email:</b> sos.estimator@outlook.com</div>
-                    <div><b>Execution Date:</b> <span id="doc-sign-sos-date">September 1, 2026</span></div>
+                    <div><b>Title / Role:</b> Managing Director / Operations Lead</div>
+                    <div><b>Service Department:</b> Commercial Janitorial Operations</div>
+                    <div><b>Direct Account Support:</b> Available upon execution</div>
+                    <div><b>Execution Date:</b> <span id="doc-sign-sos-date">September 4, 2026</span></div>
                   </div>
                 </div>
               </div>
@@ -2142,7 +2140,7 @@ function emailContractToBusiness() {
   const signDate = document.getElementById('doc-sign-client-date') ? document.getElementById('doc-sign-client-date').innerText : new Date().toLocaleDateString();
 
   const subject = "SIGNED COMMERCIAL CONTRACT: " + clientName + " (" + monthlyTotal + "/mo)";
-  const body = "SPOTLESS OFFICE SOLUTIONS LLC - SIGNED COMMERCIAL SERVICE CONTRACT%0D%0A%0D%0A" +
+  const body = "COMMERCIAL CLEANING SERVICE CONTRACT - SIGNED & EXECUTED%0D%0A%0D%0A" +
     "CLIENT ACCOUNT INFORMATION:%0D%0A" +
     "• Client Company: " + clientName + "%0D%0A" +
     "• Facility Address: " + facilityAddr + "%0D%0A" +
@@ -2151,12 +2149,9 @@ function emailContractToBusiness() {
     "E-SIGNATURE & EXECUTION:%0D%0A" +
     "• Signed By: " + signName + "%0D%0A" +
     "• Execution Date: " + signDate + "%0D%0A" +
-    "• Service Provider: Spotless Office Solutions LLC%0D%0A" +
-    "• Primary Contact: Guy Chickering & Jacquise Arrington ((206) 578-0727)%0D%0A" +
-    "• Master Estimator Email: sos.estimator@outlook.com%0D%0A%0D%0A" +
-    "STATUS: Signed Contract Executed and Logged.%0D%0A";
+    "• Status: Official Commercial Contract Signed & Executed.%0D%0A";
 
-  const mailtoUrl = "mailto:sos.estimator@outlook.com?subject=" + encodeURIComponent(subject) + "&body=" + body;
+  const mailtoUrl = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + body;
   
   const a = document.createElement('a');
   a.href = mailtoUrl;
