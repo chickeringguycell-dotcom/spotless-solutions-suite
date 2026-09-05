@@ -502,14 +502,17 @@
 
   <!-- Top App Bar -->
   <header>
-    <div class="brand-title" id="brandTitleBox" data-rename-key="app_header_title" style="display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;" title="Long-press to rename">
+    <div class="brand-title" id="brandTitleBox" data-rename-key="app_header_title" style="display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;" title="Tap to customize company">
       <img src="apple-touch-icon.png" alt="Logo" style="width: 34px; height: 34px; border-radius: 8px; box-shadow: 0 0 10px rgba(212,175,55,0.4);">
       <div style="text-align: left;">
-        <div id="txt-brand-main" style="font-size: 16px; font-weight: 900; line-height: 1.1; color: var(--gold);">Spotless Office Solutions</div>
-        <div id="txt-brand-sub" style="font-size: 10px; font-weight: 700; color: var(--silver); letter-spacing: 0.5px; text-transform: uppercase;">SOS Commercial Estimator</div>
+        <div id="txt-brand-main" style="font-size: 16px; font-weight: 900; line-height: 1.1; color: var(--gold);">CleanQuote PRO</div>
+        <div id="txt-brand-sub" style="font-size: 10px; font-weight: 700; color: var(--silver); letter-spacing: 0.5px; text-transform: uppercase;">Commercial Cleaning Estimator</div>
       </div>
     </div>
-    <button class="header-btn" onclick="openModal('ownerModal')">⚙️ Owner Settings</button>
+    <div style="display: flex; gap: 6px;">
+      <button class="header-btn" onclick="openProfileModal()">🏢 Setup</button>
+      <button class="header-btn" onclick="openModal('ownerModal')">⚙️ Pricing</button>
+    </div>
   </header>
 
   <main>
@@ -517,7 +520,7 @@
     <div id="install-banner" class="card" style="background: linear-gradient(135deg, #1A1D24 0%, #0F1117 100%); border: 2px solid var(--gold); padding: 12px 16px; margin-bottom: 12px;">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
         <div style="text-align: left;">
-          <div style="font-weight: 900; font-size: 14px; color: var(--gold);">★ Install SOS Estimator App</div>
+          <div style="font-weight: 900; font-size: 14px; color: var(--gold);">★ Install CleanQuote PRO App</div>
           <div style="font-size: 11px; color: var(--silver); margin-top: 2px;">1-Tap Home Screen App (100% Offline)</div>
         </div>
         <div style="display: flex; gap: 6px;">
@@ -1258,6 +1261,53 @@
           <input type="number" id="adv-miles" class="input-field" value="5" style="padding: 10px;" onchange="calculate()">
         </div>
         <button class="btn-main" onclick="closeModal('advancedModal')">Save Adjustments</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Company Setup & Profile Modal -->
+  <div id="profileModal" class="modal-overlay" style="display: none; z-index: 1200;">
+    <div class="modal-content" style="max-width: 460px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">🏢</span>
+          <div>
+            <h3 id="profileModalTitle" style="font-weight: 900; color: var(--gold); margin: 0; font-size: 16px;">Company Setup & Branding</h3>
+            <div style="font-size: 11px; color: var(--silver); margin-top: 2px;">Your info will automatically appear on all bids & contracts</div>
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px; line-height: 1.5; color: #E2E8F0;">
+        <div class="input-group">
+          <label class="input-label" style="color: var(--gold);">Company / Business Name *</label>
+          <input type="text" id="prof-company" class="input-field" placeholder="e.g. Summit Commercial Cleaning" style="font-size: 14px; padding: 10px;">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label" style="color: var(--gold);">Owner / Managing Director Name *</label>
+          <input type="text" id="prof-owner" class="input-field" placeholder="e.g. Jane Doe" style="font-size: 14px; padding: 10px;">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label" style="color: #94A3B8;">Co-Owner / Operations Lead (Optional)</label>
+          <input type="text" id="prof-partner" class="input-field" placeholder="e.g. John Smith" style="font-size: 14px; padding: 10px;">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label" style="color: var(--gold);">Direct Business Phone *</label>
+          <input type="text" id="prof-phone" class="input-field" placeholder="e.g. (555) 234-5678" style="font-size: 14px; padding: 10px;">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label" style="color: var(--gold);">Direct Business Email *</label>
+          <input type="email" id="prof-email" class="input-field" placeholder="e.g. bids@summitcleaning.com" style="font-size: 14px; padding: 10px;">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label" style="color: #94A3B8;">Company Tagline / Specialty</label>
+          <input type="text" id="prof-tagline" class="input-field" value="Commercial Janitorial Services & Facility Care" style="font-size: 14px; padding: 10px;">
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 18px;">
+          <button class="btn-main" onclick="saveProfile()" style="flex: 2; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); color: #000; font-weight: 900;">✓ Save Company Profile</button>
+          <button class="btn-main" onclick="resetProfileDefaults()" style="background: #2D3342; color: #CBD5E1; flex: 1; font-size: 12px;">Reset Defaults</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2186,6 +2236,103 @@ function applySignatureToAgreement() {
     emailContractToBusiness();
   }, 300);
 }
+
+// ==============================================================
+// COMPANY PROFILE & CONTRACTOR STARTUP WIZARD ENGINE
+// ==============================================================
+function getSavedProfile() {
+  const raw = localStorage.getItem('cleanquote_company_profile');
+  if (raw) {
+    try { return JSON.parse(raw); } catch(e){}
+  }
+  return {
+    companyName: 'CleanQuote PRO',
+    ownerName: '[Authorized Owner / Manager]',
+    partnerName: '',
+    phone: '(555) 000-0000',
+    email: 'bids@cleaningcompany.com',
+    tagline: 'Commercial Janitorial Services & Facility Care'
+  };
+}
+
+function openProfileModal(isFirstRun = false) {
+  const profile = getSavedProfile();
+  if (document.getElementById('prof-company')) document.getElementById('prof-company').value = (profile.companyName && profile.companyName !== 'CleanQuote PRO') ? profile.companyName : '';
+  if (document.getElementById('prof-owner')) document.getElementById('prof-owner').value = (profile.ownerName && !profile.ownerName.includes('[')) ? profile.ownerName : '';
+  if (document.getElementById('prof-partner')) document.getElementById('prof-partner').value = profile.partnerName || '';
+  if (document.getElementById('prof-phone')) document.getElementById('prof-phone').value = (profile.phone && profile.phone !== '(555) 000-0000') ? profile.phone : '';
+  if (document.getElementById('prof-email')) document.getElementById('prof-email').value = (profile.email && profile.email !== 'bids@cleaningcompany.com') ? profile.email : '';
+  if (document.getElementById('prof-tagline')) document.getElementById('prof-tagline').value = profile.tagline || 'Commercial Janitorial Services & Facility Care';
+  
+  const titleEl = document.getElementById('profileModalTitle');
+  if (titleEl) {
+    titleEl.innerText = isFirstRun ? '👋 Welcome! Company Setup Wizard' : '🏢 Company Setup & Branding';
+  }
+  openModal('profileModal');
+}
+
+function saveProfile() {
+  const comp = (document.getElementById('prof-company') ? document.getElementById('prof-company').value.trim() : '') || 'CleanQuote PRO';
+  const owner = (document.getElementById('prof-owner') ? document.getElementById('prof-owner').value.trim() : '') || '[Owner / Manager]';
+  const partner = document.getElementById('prof-partner') ? document.getElementById('prof-partner').value.trim() : '';
+  const phone = (document.getElementById('prof-phone') ? document.getElementById('prof-phone').value.trim() : '') || '(555) 000-0000';
+  const email = (document.getElementById('prof-email') ? document.getElementById('prof-email').value.trim() : '') || 'bids@cleaningcompany.com';
+  const tagline = (document.getElementById('prof-tagline') ? document.getElementById('prof-tagline').value.trim() : '') || 'Commercial Janitorial Services & Facility Care';
+
+  const profile = { companyName: comp, ownerName: owner, partnerName: partner, phone, email, tagline };
+  localStorage.setItem('cleanquote_company_profile', JSON.stringify(profile));
+  localStorage.setItem('cleanquote_wizard_completed', 'true');
+
+  applyProfileToApp(profile);
+  closeModal('profileModal');
+  alert('✓ Company Profile Saved! Your company name, signature, and phone will now appear automatically across all bids and contracts.');
+}
+
+function resetProfileDefaults() {
+  if (confirm('Reset company profile to clean defaults?')) {
+    localStorage.removeItem('cleanquote_company_profile');
+    localStorage.removeItem('cleanquote_wizard_completed');
+    const def = getSavedProfile();
+    applyProfileToApp(def);
+    closeModal('profileModal');
+  }
+}
+
+function applyProfileToApp(profile) {
+  if (!profile) profile = getSavedProfile();
+  
+  // Update Top Bar Branding
+  const brandMain = document.getElementById('txt-brand-main');
+  const brandSub = document.getElementById('txt-brand-sub');
+  if (brandMain && profile.companyName) brandMain.innerText = profile.companyName;
+  if (brandSub && profile.tagline) brandSub.innerText = profile.tagline;
+
+  // Update Contract and Proposal Signatures & Details
+  const docBrandElements = document.querySelectorAll('.doc-company-name');
+  docBrandElements.forEach(el => el.innerText = profile.companyName);
+
+  const docOwnerElements = document.querySelectorAll('.doc-owner-name');
+  docOwnerElements.forEach(el => el.innerText = profile.ownerName);
+
+  const docPhoneElements = document.querySelectorAll('.doc-phone-number');
+  docPhoneElements.forEach(el => el.innerText = profile.phone);
+
+  const docEmailElements = document.querySelectorAll('.doc-email-address');
+  docEmailElements.forEach(el => el.innerText = profile.email);
+}
+
+// Initialize and check for First-Run Setup Wizard
+window.addEventListener('DOMContentLoaded', () => {
+  const profile = getSavedProfile();
+  applyProfileToApp(profile);
+  
+  const wizardDone = localStorage.getItem('cleanquote_wizard_completed');
+  if (!wizardDone) {
+    setTimeout(() => {
+      openProfileModal(true);
+    }, 700);
+  }
+});
 
   </script>
   <script src="sos_pwa_push.js"></script>
