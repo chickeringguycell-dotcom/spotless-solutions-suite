@@ -541,18 +541,28 @@
       <span style="color: var(--gold); font-size: 11px; cursor: pointer;" onclick="openModal('advancedModal')">⚙️ Advanced Mode</span>
     </div>
 
-    <!-- Input 1: Square Footage -->
-    <div class="card">
-      <div class="input-group">
-        <label class="input-label" id="label-sqft" data-rename-key="label-sqft" style="cursor: pointer; user-select: none;" title="Long-press to rename">1. Total Office Cleanable Area (Sq Ft) *</label>
-        <input type="number" id="sqFt" class="input-field" value="8500" placeholder="e.g. 8,500">
+    <!-- Row 1: Square Footage and Hourly Billing Rate (Side-by-Side) -->
+    <div class="stepper-row">
+      <div class="stepper-card">
+        <div class="stepper-label" id="label-sqft" data-rename-key="label-sqft" style="cursor: pointer; user-select: none;" title="Long-press to rename">1. Cleanable Area (Sq Ft) *</div>
+        <div class="stepper-control" style="padding: 3px 8px;">
+          <input type="number" id="sqFt" class="step-input" value="8500" placeholder="8500" style="width: 100%; font-size: 19px; font-weight: 900; color: #FFFFFF; text-align: center;" oninput="calculate()">
+        </div>
+      </div>
+      <div class="stepper-card">
+        <div class="stepper-label" id="label-billrate" data-rename-key="label-billrate" style="cursor: pointer; user-select: none;" title="Long-press to rename">2. Hourly Billing Rate</div>
+        <div class="stepper-control" style="padding: 3px 8px;">
+          <span style="font-size: 16px; font-weight: 900; color: var(--gold); margin-right: 2px;">$</span>
+          <input type="number" id="hourlyRate" class="step-input" value="60" placeholder="60" style="width: 100%; font-size: 19px; font-weight: 900; color: var(--gold); text-align: center;" oninput="calculate()">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-sub); margin-left: 2px;">/hr</span>
+        </div>
       </div>
     </div>
 
-    <!-- Input 2 & 3: Commercial Restrooms and Office Kitchens -->
+    <!-- Row 2: Commercial Restrooms and Office Kitchens -->
     <div class="stepper-row">
       <div class="stepper-card">
-        <div class="stepper-label">2. Commercial Restrooms</div>
+        <div class="stepper-label" id="label-restrooms">3. Commercial Restrooms</div>
         <div class="stepper-control">
           <button class="step-btn" onclick="changeStep('restrooms', -1)">−</button>
           <input type="number" id="input-restrooms" class="step-input" value="4" min="0" oninput="updateFromInput('restrooms')">
@@ -560,7 +570,7 @@
         </div>
       </div>
       <div class="stepper-card">
-        <div class="stepper-label">3. Kitchens / Break Areas</div>
+        <div class="stepper-label" id="label-kitchens">4. Kitchens / Break Areas</div>
         <div class="stepper-control">
           <button class="step-btn" onclick="changeStep('kitchens', -1)">−</button>
           <input type="number" id="input-kitchens" class="step-input" value="2" min="0" oninput="updateFromInput('kitchens')">
@@ -569,10 +579,10 @@
       </div>
     </div>
 
-    <!-- Input 4 & 5: Estimated Staff and Desks to be Cleaned -->
+    <!-- Row 3: Estimated Staff and Desks to be Cleaned -->
     <div class="stepper-row">
       <div class="stepper-card">
-        <div class="stepper-label" id="label-occupants">4. Estimated Staff / Office Occupants</div>
+        <div class="stepper-label" id="label-occupants">5. Estimated Staff / Occupants</div>
         <div class="stepper-control">
           <button class="step-btn" onclick="changeStep('occupants', -1)">−</button>
           <input type="number" id="input-occupants" class="step-input" value="65" min="0" oninput="updateFromInput('occupants')">
@@ -580,7 +590,7 @@
         </div>
       </div>
       <div class="stepper-card">
-        <div class="stepper-label" id="label-desks">5. Desks to be Cleaned</div>
+        <div class="stepper-label" id="label-desks">6. Desks to be Cleaned</div>
         <div class="stepper-control">
           <button class="step-btn" onclick="changeStep('desks', -1)">−</button>
           <input type="number" id="input-desks" class="step-input" value="65" min="0" oninput="updateFromInput('desks')">
@@ -602,10 +612,10 @@
       </div>
     </div>
 
-    <!-- Input 6: Floor Surface Mix (Sweeping & Mopping vs Vacuuming) -->
+    <!-- Input 7: Floor Surface Mix (Sweeping & Mopping vs Vacuuming) -->
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">6. Floor Surfaces (Mopping vs Vacuuming)</label>
+        <label class="input-label" style="margin-bottom: 0;">7. Floor Surfaces (Mopping vs Vacuuming)</label>
         <span id="floor-mix-display" style="font-size: 11px; font-weight: 800; color: var(--gold);">70% Carpet • 30% Hard Floor</span>
       </div>
       <input type="range" id="slider-hardfloor" min="0" max="100" value="30" step="5" style="width: 100%; accent-color: var(--gold); cursor: pointer;" oninput="updateFloorMix(this.value)">
@@ -613,19 +623,6 @@
         <span>100% Carpet (Vacuum Only)</span>
         <span>50/50</span>
         <span>100% Hard Tile/Wood (Mop & Sweep)</span>
-      </div>
-    </div>
-
-    <!-- Input 7: Hourly Billing Rate Input -->
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">7. Target Hourly Billing Rate ($/hr)</label>
-        <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Customer Rate</span>
-      </div>
-      <div style="display: flex; align-items: center; background: var(--silver-light); border: 1.2px solid var(--silver-border); border-radius: 10px; padding: 0 14px;">
-        <span style="font-size: 20px; font-weight: 900; color: var(--gold); margin-right: 6px;">$</span>
-        <input type="number" id="hourlyRate" class="input-field" value="60" placeholder="60.00" style="background: transparent; border: none; padding: 12px 0; font-size: 22px; width: 100%;" oninput="calculate()">
-        <span style="font-size: 13px; font-weight: 700; color: var(--text-sub);">/ hr</span>
       </div>
     </div>
 
