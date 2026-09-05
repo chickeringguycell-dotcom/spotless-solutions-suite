@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#090A0D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>SOS Estimator</title>
+  <meta name="apple-mobile-web-app-title" content="SOS Estimator Pro">
+  <meta name="application-name" content="SOS Estimator Pro">
+  <title>SOS Estimator Pro</title>
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="manifest.json?v=501">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=501">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=501">
+  <style>
+    :root {
+      --bg: #090A0D;             /* Deep Pitch Onyx Black */
+      --card-bg: #14171E;        /* Executive Obsidian Card */
+      --card-elevated: #1B1F2A;  /* Elevated Black Card */
+      --primary: #090A0D;
+      --primary-dark: #000000;
+      --silver: #94A3B8;         /* Metallic Silver */
+      --silver-light: #1F2430;   /* Dark Platinum Input Background */
+      --silver-border: #2D3342;  /* Polished Silver Border */
+      --gold: #D4AF37;           /* Imperial Metallic Gold */
+      --gold-light: #FCD34D;     /* Radiant Warm Gold */
+      --gold-dark: #B48A1E;      /* Deep Burnished Gold */
+      --text-main: #F8FAFC;      /* Crisp Platinum White Text */
+      --text-sub: #94A3B8;       /* Silver Secondary Text */
+      --text-muted: #64748B;     /* Muted Charcoal Text */
+      --green: #10B981;
+      --green-bg: #064E3B;
+      --red: #EF4444;
+      --red-bg: #7F1D1D;
+      --yellow: #D4AF37;
+      --yellow-bg: #78350F;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+      padding-bottom: 60px;
+    }
+
+    /* Top App Bar */
+    header {
+      background-color: #000000;
+      color: #FFFFFF;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-icon {
+      background-color: var(--gold);
+      color: #000000;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .header-btn {
+      background: #14171E;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin: 16px 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .hero-card {
+      background: #000000;
+      color: #FFFFFF;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 14px;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+    }
+
+    /* Form Fields */
+    .input-group {
+      margin-bottom: 6px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      background: var(--silver-light);
+      border: 1px solid var(--silver-border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--gold);
+      background: #14171E;
+    }
+
+    /* Steppers */
+    .stepper-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stepper-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stepper-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .stepper-control {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--silver-light);
+      border: 1px solid var(--silver-border);
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .step-btn {
+      background: #14171E;
+      border: 1px solid var(--silver-border);
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-value {
+      font-size: 18px;
+      font-weight: 900;
+      color: #FFFFFF;
+    }
+
+    .step-input {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      font-weight: 900;
+      color: #FFFFFF;
+      text-align: center;
+      width: 60px;
+      outline: none;
+    }
+
+    /* Multi-Button Pill Selectors */
+    .pill-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .pill-btn {
+      flex: 1;
+      padding: 12px 4px;
+      background: var(--silver-light);
+      border: 1px solid var(--silver-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-sub);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .pill-btn.active {
+      background: var(--gold);
+      color: #000000;
+      border-color: var(--gold);
+      font-weight: 900;
+    }
+
+    .pill-btn.active {
+      background: var(--gold);
+      color: #000000;
+      border-color: var(--gold-light);
+      font-weight: 900;
+    }
+
+    /* Buttons */
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-secondary {
+      background: #14171E;
+      border: 1.5px solid var(--gold);
+      color: #FFFFFF;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      background: #1B1F2A;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    /* Results Box Styling */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-green { background: var(--green-bg); color: #34D399; border: 1px solid var(--green); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--gold-light); border: 1px solid var(--gold); }
+    .badge-red { background: var(--red-bg); color: #F87171; border: 1px solid var(--red); }
+
+    .hero-price {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      color: var(--gold-light);
+      margin: 8px 0 4px;
+    }
+
+    .hero-sub {
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .divider-dark {
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+      margin: 16px 0;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+    }
+
+    .metric-val {
+      font-size: 14px;
+      font-weight: 900;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+
+    .metric-val-gold {
+      color: var(--gold-light);
+    }
+
+    /* Modal / Popups */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: #14171E;
+      border-radius: 16px;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1.5px solid var(--gold);
+      color: #FFFFFF;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--silver-border);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+      color: var(--gold);
+    }
+  </style>
+
+  <style id="print-stylesheet">
+    @page {
+      size: letter portrait;
+      margin: 0.3in 0.4in;
+    }
+    @media print {
+      html, body {
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .app-container, .modal-overlay:not(#proposalModal) {
+        display: none !important;
+      }
+      #proposalModal {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: auto !important;
+      }
+      #proposalModal .modal-content {
+        display: block !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .modal-header, .proposal-toolbar, #proposal-scope-tab, .no-print {
+        display: none !important;
+      }
+      #proposal-preview-tab {
+        display: block !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      #print-agreement-container {
+        display: block !important;
+        min-width: 100% !important;
+        width: 100% !important;
+        position: static !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+      }
+      .agreement-page {
+        width: 100% !important;
+        min-height: 9.8in !important;
+        padding: 0.2in 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        border-bottom: none !important;
+      }
+      .agreement-page:last-child {
+        page-break-after: auto !important;
+      }
+    }
+  </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="manifest" href="manifest.json?v=116">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=116">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=116">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=116">
+  <link rel="apple-touch-icon" href="icon-512.png?v=116">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=116">
+  <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png?v=116">
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header>
+    <div class="brand-title" id="brandTitleBox" data-rename-key="app_header_title" style="display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;" title="Long-press to rename">
+      <img src="apple-touch-icon.png" alt="Logo" style="width: 34px; height: 34px; border-radius: 8px; box-shadow: 0 0 10px rgba(212,175,55,0.4);">
+      <div style="text-align: left;">
+        <div id="txt-brand-main" style="font-size: 16px; font-weight: 900; line-height: 1.1; color: var(--gold);">Spotless Office Solutions</div>
+        <div id="txt-brand-sub" style="font-size: 10px; font-weight: 700; color: var(--silver); letter-spacing: 0.5px; text-transform: uppercase;">SOS Commercial Estimator</div>
+      </div>
+    </div>
+    <button class="header-btn" onclick="openModal('ownerModal')">⚙️ Owner Settings</button>
+  </header>
+
+  <main>
+    <!-- Permanent Install to Phone Button -->
+    <div id="install-banner" class="card" style="background: linear-gradient(135deg, #1A1D24 0%, #0F1117 100%); border: 2px solid var(--gold); padding: 12px 16px; margin-bottom: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div style="text-align: left;">
+          <div style="font-weight: 900; font-size: 14px; color: var(--gold);">★ Install SOS Estimator App</div>
+          <div style="font-size: 11px; color: var(--silver); margin-top: 2px;">1-Tap Home Screen App (100% Offline)</div>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-top-install" onclick="triggerInstall()" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: none; cursor: pointer; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); color: #000000; font-weight: 900; font-size: 12px; padding: 10px 14px; border-radius: 8px; white-space: nowrap; box-shadow: 0 0 12px rgba(212,175,55,0.4);">
+            📲 Install App
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Name Field -->
+    <div class="card" style="padding: 12px 16px;">
+      <div class="input-group">
+        <label class="input-label" style="font-size: 11px; color: var(--gold); text-transform: uppercase;">Client / Account Name</label>
+        <input type="text" id="companyName" class="input-field" value="Commercial Client" style="font-size: 15px; padding: 10px;">
+      </div>
+    </div>
+
+    <div class="section-label">
+      <span>Primary Walkthrough Inputs (1 – 7)</span>
+      <span style="color: var(--gold); font-size: 11px; cursor: pointer;" onclick="openModal('advancedModal')">⚙️ Advanced Mode</span>
+    </div>
+
+    <!-- Input 1: Square Footage -->
+    <div class="card">
+      <div class="input-group">
+        <label class="input-label" id="label-sqft" data-rename-key="label-sqft" style="cursor: pointer; user-select: none;" title="Long-press to rename">1. Total Office Cleanable Area (Sq Ft) *</label>
+        <input type="number" id="sqFt" class="input-field" value="8500" placeholder="e.g. 8,500">
+      </div>
+    </div>
+
+    <!-- Input 2 & 3: Commercial Restrooms and Office Kitchens -->
+    <div class="stepper-row">
+      <div class="stepper-card">
+        <div class="stepper-label">2. Commercial Restrooms</div>
+        <div class="stepper-control">
+          <button class="step-btn" onclick="changeStep('restrooms', -1)">−</button>
+          <input type="number" id="input-restrooms" class="step-input" value="4" min="0" oninput="updateFromInput('restrooms')">
+          <button class="step-btn" onclick="changeStep('restrooms', 1)">+</button>
+        </div>
+      </div>
+      <div class="stepper-card">
+        <div class="stepper-label">3. Kitchens / Break Areas</div>
+        <div class="stepper-control">
+          <button class="step-btn" onclick="changeStep('kitchens', -1)">−</button>
+          <input type="number" id="input-kitchens" class="step-input" value="2" min="0" oninput="updateFromInput('kitchens')">
+          <button class="step-btn" onclick="changeStep('kitchens', 1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input 4: Office Staff & Occupancy (Directly Editable) -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label class="input-label" style="margin-bottom: 0;">4. Estimated Staff / Office Occupants</label>
+        <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Type or tap + / −</span>
+      </div>
+      <div class="stepper-control" style="background: var(--silver-light); padding: 6px;">
+        <button class="step-btn" onclick="changeStep('occupants', -1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">−</button>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1;">
+          <input type="number" id="input-occupants" class="step-input" value="65" min="0" style="font-size: 26px; width: 90px; text-align: center;" oninput="updateFromInput('occupants')">
+          <span style="font-size: 13px; color: var(--text-sub); font-weight: 700;">people</span>
+        </div>
+        <button class="step-btn" onclick="changeStep('occupants', 1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">+</button>
+      </div>
+    </div>
+
+    <!-- Input 5: Hourly Billing Rate Input -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label class="input-label" style="margin-bottom: 0;">5. Target Hourly Billing Rate ($/hr)</label>
+        <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Customer Rate</span>
+      </div>
+      <div style="display: flex; align-items: center; background: var(--silver-light); border: 1.2px solid var(--silver-border); border-radius: 10px; padding: 0 14px;">
+        <span style="font-size: 20px; font-weight: 900; color: var(--gold); margin-right: 6px;">$</span>
+        <input type="number" id="hourlyRate" class="input-field" value="60" placeholder="60.00" style="background: transparent; border: none; padding: 12px 0; font-size: 22px; width: 100%;">
+        <span style="font-size: 13px; font-weight: 700; color: var(--text-sub);">/ hr</span>
+      </div>
+    </div>
+
+    <!-- Input 6: Cleanings Per Week -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label class="input-label" style="margin-bottom: 0;">6. Cleanings Per Week</label>
+        <span id="monthly-visits-hint" style="font-size: 11px; font-weight: 800; color: var(--gold);">13.0 visits / mo</span>
+      </div>
+      <div class="pill-group" id="freq-pills">
+        <div class="pill-btn" onclick="setFreq(1)">1x</div>
+        <div class="pill-btn" onclick="setFreq(2)">2x</div>
+        <div class="pill-btn active" onclick="setFreq(3)">3x</div>
+        <div class="pill-btn" onclick="setFreq(4)">4x</div>
+        <div class="pill-btn" onclick="setFreq(5)">5x</div>
+        <div class="pill-btn" onclick="setFreq(6)">6x</div>
+        <div class="pill-btn" onclick="setFreq(7)">7x</div>
+      </div>
+    </div>
+
+    <!-- Input 7: Cleaning Difficulty -->
+    <div class="card">
+      <label class="input-label" id="label-diff" data-rename-key="label-diff" style="cursor: pointer; user-select: none;" title="Long-press to rename">7. Cleaning Difficulty / Condition</label>
+      <div class="pill-group">
+        <div class="pill-btn" id="diff-light" onclick="setDiff('light')">🍃 Light (0.95x)</div>
+        <div class="pill-btn active" id="diff-normal" onclick="setDiff('normal')">🏢 Normal (1.00x)</div>
+        <div class="pill-btn" id="diff-heavy" onclick="setDiff('heavy')">⚡ Heavy (1.20x)</div>
+      </div>
+    </div>
+
+    <!-- Calculate Button -->
+    <button id="btn-main-calculate" class="btn-main" onclick="calculate()">⚡ CALCULATE QUOTE</button>
+
+    <!-- Results Box (Executive Black & Gold) -->
+    <div class="hero-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.6px; color: var(--gold);">RECOMMENDED QUOTE</span>
+        <span id="margin-badge" class="badge badge-green">GREEN (44.8%)</span>
+      </div>
+
+      <div class="hero-price" id="res-monthly">$3,955.77 <span style="font-size: 15px; color: #FFFFFF; font-weight: 700;">/ mo</span></div>
+      <div class="hero-sub" id="res-per-visit">$304.29 per visit (3x weekly)</div>
+
+      <div class="divider-dark"></div>
+
+      <div class="metric-grid">
+        <div class="metric-item">
+          <span class="metric-title">Labor / Visit</span>
+          <span class="metric-val" id="res-hours">5.07 hrs</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-title">Monthly Labor</span>
+          <span class="metric-val" id="res-monthly-hours">65.9 hrs</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-title">Monthly Profit</span>
+          <span class="metric-val metric-val-gold" id="res-profit">$1,772.18</span>
+        </div>
+      </div>
+
+      <div class="metric-grid" style="margin-top: 14px;">
+        <div class="metric-item">
+          <span class="metric-title">Cost / Visit</span>
+          <span class="metric-val" id="res-cost">$167.97</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-title">Monthly Cost</span>
+          <span class="metric-val" id="res-monthly-cost">$2,183.59</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-title">Gross Margin</span>
+          <span class="metric-val metric-val-gold" id="res-margin">44.8%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Action Hub -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;">
+      <button class="btn-secondary" onclick="openModal('proposalModal')">📄 Client Proposal</button>
+      <button class="btn-gold" onclick="openModal('auditModal')">🔍 Owner Audit</button>
+    </div>
+  </main>
+
+  <!-- Commercial Cleaning Proposal & Agreement Modal -->
+  <div id="proposalModal" class="modal-overlay" style="display: none; z-index: 1000;">
+    <div class="modal-content" style="max-width: 850px; max-height: 92vh; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+      
+      <!-- Top Modal Navigation Bar -->
+      <div class="modal-header" style="padding: 12px 18px; background: #13161C; border-bottom: 1.5px solid var(--gold); margin-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="apple-touch-icon.png" style="width: 28px; height: 28px; border-radius: 6px;">
+          <div>
+            <div style="font-weight: 900; font-size: 15px; color: var(--gold);">Commercial Cleaning Proposal & Agreement</div>
+            <div style="font-size: 11px; color: var(--silver);" id="nav-prop-summary">Spotless Office Solutions • Official Janitorial Contract</div>
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('proposalModal')">&times;</button>
+      </div>
+
+      <!-- Action Control Toolbar -->
+      <div style="background: #1A1D24; padding: 10px 16px; border-bottom: 1px solid #2D3342; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
+        <div style="display: flex; gap: 6px;">
+          <button class="btn-main" onclick="switchProposalTab('preview')" id="tab-btn-preview" style="font-size: 11px; padding: 6px 10px; background: var(--gold); color: #000;">📄 View Agreement</button>
+          <button class="btn-main" onclick="switchProposalTab('scope')" id="tab-btn-scope" style="font-size: 11px; padding: 6px 10px; background: #2D3342; color: #CBD5E1;">✏️ Customize Scope</button>
+          <button class="btn-main" onclick="openSignatureModal()" style="font-size: 11px; padding: 6px 10px; background: #064E3B; color: #34D399; border: 1px solid #10B981;">✍️ E-Sign Contract</button>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-save-agreement" onclick="downloadContractHtml()" style="background: #1E293B; color: #38BDF8; font-weight: 800; font-size: 11px; padding: 7px 12px; border: 1.5px solid #0284C7; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            💾 Save to Files
+          </button>
+          <button id="btn-print-agreement" onclick="printAgreementDocument()" style="background: linear-gradient(135deg, #F59E0B 0%, #D4AF37 100%); color: #000000; font-weight: 900; font-size: 11px; padding: 7px 12px; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 10px rgba(212,175,55,0.5);">
+            🖨️ Print (PDF)
+          </button>
+          <button id="btn-share-agreement" onclick="shareAgreementDocument()" style="background: #2D3342; color: #FFFFFF; font-weight: 700; font-size: 11px; padding: 7px 12px; border: 1px solid var(--silver-border); border-radius: 6px; cursor: pointer;">
+            📲 Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Scrollable Container) -->
+      <div style="flex: 1; overflow-y: auto; padding: 16px; background: #0B0D12;">
+
+        <!-- TAB 1: SCOPE CUSTOMIZER VIEW -->
+        <div id="proposal-scope-tab" style="display: none;">
+          <div class="card" style="margin-bottom: 12px; border: 1.5px solid var(--gold);">
+            <div style="font-weight: 900; color: var(--gold); font-size: 14px; margin-bottom: 6px;">📋 Client & Service Details</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="input-group">
+                <label class="input-label" style="font-size: 11px;">Client / Company Name</label>
+                <input type="text" id="prop-input-client" class="input-field" style="padding: 8px; font-size: 13px;" oninput="updateAgreementPreview()">
+              </div>
+              <div class="input-group">
+                <label class="input-label" style="font-size: 11px;">Service Facility Address</label>
+                <input type="text" id="prop-input-address" class="input-field" value="100 Commercial Plaza, Suite 400" style="padding: 8px; font-size: 13px;" oninput="updateAgreementPreview()">
+              </div>
+              <div class="input-group">
+                <label class="input-label" style="font-size: 11px;">Primary Client Contact Person</label>
+                <input type="text" id="prop-input-contact" class="input-field" value="Operations Manager" style="padding: 8px; font-size: 13px;" oninput="updateAgreementPreview()">
+              </div>
+              <div class="input-group">
+                <label class="input-label" style="font-size: 11px;">Service Commencement Date</label>
+                <input type="date" id="prop-input-startdate" class="input-field" style="padding: 8px; font-size: 13px;" oninput="updateAgreementPreview()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Included Services Checklist -->
+          <div class="card" style="border: 1.5px solid var(--gold);">
+            <div style="font-weight: 900; color: var(--gold); font-size: 14px; margin-bottom: 4px;">🧹 Core Office Janitorial Services (Included)</div>
+            <div style="font-size: 11px; color: var(--silver); margin-bottom: 12px;">Select or uncheck items to include in the official contract scope:</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <!-- General Office -->
+              <div style="background: #13161C; padding: 10px; border-radius: 8px; border: 1px solid #2D3342;">
+                <div style="font-weight: 800; color: var(--gold); font-size: 12px; margin-bottom: 6px;">1. General Office & Workstations</div>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-trash" checked onchange="updateAgreementPreview()"> Empty all designated trash receptacles & replace liners</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-recycle" checked onchange="updateAgreementPreview()"> Remove designated office paper & container recycling</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-desks" checked onchange="updateAgreementPreview()"> Wipe & sanitize accessible desk/work surfaces</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-dust" checked onchange="updateAgreementPreview()"> Dust reachable horizontal surfaces & windowsills</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-touch" checked onchange="updateAgreementPreview()"> Disinfect high-touch door handles, push plates & switches</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #E2E8F0;"><input type="checkbox" id="chk-conf" checked onchange="updateAgreementPreview()"> Clean & sanitize conference room tables & reception</label>
+              </div>
+
+              <!-- Floor Care -->
+              <div style="background: #13161C; padding: 10px; border-radius: 8px; border: 1px solid #2D3342;">
+                <div style="font-weight: 800; color: var(--gold); font-size: 12px; margin-bottom: 6px;">2. Floor Cleaning (Carpet & Hard Floor)</div>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-vac" checked onchange="updateAgreementPreview()"> Vacuum all carpeted office areas, hallways & mats</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-sweep" checked onchange="updateAgreementPreview()"> Dust-mop & sweep hard-surface flooring</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-mop" checked onchange="updateAgreementPreview()"> Damp-mop hard surface floors with neutral cleaner</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #E2E8F0;"><input type="checkbox" id="chk-spot" checked onchange="updateAgreementPreview()"> Spot-clean normal floor spills & scuffs</label>
+                <div style="font-size: 10px; color: #94A3B8; margin-top: 6px; font-style: italic;">* Note: Floor stripping, waxing, buffing & refinishing are excluded.</div>
+              </div>
+
+              <!-- Restrooms -->
+              <div style="background: #13161C; padding: 10px; border-radius: 8px; border: 1px solid #2D3342;">
+                <div style="font-weight: 800; color: var(--gold); font-size: 12px; margin-bottom: 6px;">3. Commercial Restrooms</div>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-rr-toilets" checked onchange="updateAgreementPreview()"> Clean, descale & disinfect toilets and urinals</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-rr-sinks" checked onchange="updateAgreementPreview()"> Sanitize sinks, faucets, counters & splashbacks</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-rr-mirrors" checked onchange="updateAgreementPreview()"> Clean and polish mirrors and bright chrome fixtures</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-rr-trash" checked onchange="updateAgreementPreview()"> Empty sanitary waste & trash, replace liners</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #E2E8F0;"><input type="checkbox" id="chk-rr-mop" checked onchange="updateAgreementPreview()"> Sweep & wet-mop floors with hospital-grade disinfectant</label>
+              </div>
+
+              <!-- Kitchens & Glass -->
+              <div style="background: #13161C; padding: 10px; border-radius: 8px; border: 1px solid #2D3342;">
+                <div style="font-weight: 800; color: var(--gold); font-size: 12px; margin-bottom: 6px;">4. Kitchens, Breakrooms & Glass</div>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-kitch-counters" checked onchange="updateAgreementPreview()"> Sanitize breakroom counters, tables & sinks</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-kitch-appliances" checked onchange="updateAgreementPreview()"> Wipe exterior surfaces of microwave, fridge & coffee bar</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-kitch-trash" checked onchange="updateAgreementPreview()"> Empty food waste containers & replace heavy liners</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #E2E8F0;"><input type="checkbox" id="chk-glass-interior" checked onchange="updateAgreementPreview()"> Clean interior glass doors, entrance sidelights & partitions</label>
+                <label style="display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #E2E8F0;"><input type="checkbox" id="chk-dumpster" checked onchange="updateAgreementPreview()"> Transport all bagged waste to onsite designated dumpster</label>
+              </div>
+            </div>
+            <button class="btn-main" onclick="switchProposalTab('preview')" style="margin-top: 14px; width: 100%;">View Updated 4-Page Agreement →</button>
+          </div>
+        </div>
+
+        <!-- TAB 2: LIVE 4-PAGE CONTRACT PREVIEW (PRINTER-PERFECT) -->
+        <div id="proposal-preview-tab" style="overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 25px; touch-action: pan-x pan-y;">
+          
+          <div style="text-align: center; color: var(--gold); font-size: 11px; margin-bottom: 8px; font-weight: 700; background: rgba(212,175,55,0.1); border: 1px dashed var(--gold); padding: 6px; border-radius: 6px;">
+            👈 Slide with finger Left / Right to pan • Pinch to Zoom in/out 👉
+          </div>
+
+          <!-- PRINT CONTAINER (Styled like white paper document for print/preview) -->
+          <div id="print-agreement-container" style="min-width: 680px; width: 100%; background: #FFFFFF; color: #0F172A; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); padding: 0;">
+
+            <!-- ================= PAGE 1: PROPOSAL SUMMARY & COVER ================= -->
+            <div class="agreement-page" id="contract-page-1" style="border-bottom: 2px dashed #CBD5E1;">
+              
+              <!-- Company Header -->
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2.5px solid #D4AF37; padding-bottom: 12px; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <img src="apple-touch-icon.png" style="width: 50px; height: 50px; border-radius: 8px;">
+                  <div>
+                    <div style="font-size: 20px; font-weight: 900; color: #0F172A; letter-spacing: -0.5px;">SPOTLESS OFFICE SOLUTIONS</div>
+                    <div style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 1px;">Commercial Janitorial Services & Facility Care</div>
+                    <div style="font-size: 10px; color: #475569; margin-top: 2px;">
+                      <b>Owners:</b> Guy Chickering & Jacquise Arrington • <b>Phone:</b> (206) 578-0727 • <b>Email:</b> sos.estimator@outlook.com
+                    </div>
+                  </div>
+                </div>
+                <div style="text-align: right; font-size: 11px; color: #475569; line-height: 1.4;">
+                  <div><b>Proposal Ref:</b> <span id="doc-prop-id" style="color: #0F172A; font-weight: 800;">SOS-2026-8500</span></div>
+                  <div><b>Date:</b> <span id="doc-prop-date">September 1, 2026</span></div>
+                  <div><b>Valid For:</b> 30 Days</div>
+                </div>
+              </div>
+
+              <!-- Title -->
+              <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 18px; font-weight: 900; color: #0F172A; text-transform: uppercase; letter-spacing: 1px;">Commercial Cleaning Service Proposal & Agreement</div>
+                <div style="font-size: 12px; color: #64748B; margin-top: 3px;">Comprehensive Recurring Janitorial Specifications & Contractual Terms</div>
+              </div>
+
+              <!-- Client & Facility Summary Box -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #D4AF37; padding: 12px; border-radius: 6px;">
+                  <div style="font-size: 11px; font-weight: 800; color: #B45309; text-transform: uppercase; margin-bottom: 6px;">Client & Facility Information</div>
+                  <div style="font-size: 13px; font-weight: 900; color: #0F172A;" id="doc-client-name">Apex Technology</div>
+                  <div style="font-size: 12px; color: #334155; margin-top: 2px;" id="doc-client-address">100 Commercial Plaza, Suite 400</div>
+                  <div style="font-size: 11px; color: #64748B; margin-top: 4px;"><b>Attn:</b> <span id="doc-client-contact">Operations Manager</span></div>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #0F172A; padding: 12px; border-radius: 6px;">
+                  <div style="font-size: 11px; font-weight: 800; color: #0F172A; text-transform: uppercase; margin-bottom: 6px;">Facility Operating Specifications</div>
+                  <div style="font-size: 12px; color: #334155; line-height: 1.5;">
+                    • <b>Cleanable Office Area:</b> <span id="doc-sqft" style="font-weight: 800; color: #0F172A;">8,500 Sq Ft</span><br>
+                    • <b>Restrooms:</b> <span id="doc-restrooms" style="font-weight: 800;">4 Fixture Areas</span> | <b>Breakrooms:</b> <span id="doc-kitchens" style="font-weight: 800;">2</span><br>
+                    • <b>Estimated Staff Occupancy:</b> <span id="doc-occupants" style="font-weight: 800;">65 Personnel</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Schedule & Program -->
+              <div style="background: #F1F5F9; border: 1.5px solid #CBD5E1; border-radius: 6px; padding: 14px; margin-bottom: 20px;">
+                <div style="font-size: 12px; font-weight: 900; color: #0F172A; text-transform: uppercase; margin-bottom: 6px;">Service Schedule & Operating Frequency</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #1E293B;">
+                  <div><b>Frequency:</b> <span id="doc-freq-label" style="font-weight: 900; color: #B45309;">3 Cleanings Per Week</span></div>
+                  <div><b>Service Start Date:</b> <span id="doc-start-date" style="font-weight: 800;">September 8, 2026</span></div>
+                  <div><b>Operating Hours:</b> After-Hours (6:00 PM – 11:00 PM)</div>
+                </div>
+              </div>
+
+              <!-- Investment Summary Card -->
+              <div style="background: #F8FAFC; border: 2px solid #D4AF37; border-radius: 8px; padding: 16px; margin-bottom: 22px;">
+                <div style="text-align: center; font-size: 12px; font-weight: 900; color: #B45309; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                  Commercial Financial Investment
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: center;">
+                  <div style="border-right: 1px solid #E2E8F0; padding-right: 10px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">Per-Visit Service Rate</div>
+                    <div style="font-size: 24px; font-weight: 900; color: #0F172A; margin-top: 4px;" id="doc-price-visit">$304.29</div>
+                    <div style="font-size: 10px; color: #64748B; margin-top: 2px;">Billed monthly based on frequency</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">Monthly Contract Investment</div>
+                    <div style="font-size: 26px; font-weight: 900; color: #B45309; margin-top: 4px;" id="doc-price-monthly">$3,955.77</div>
+                    <div style="font-size: 10px; color: #64748B; margin-top: 2px;">Fixed flat rate (Net 30 billing terms)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Page 1 Summary Footer -->
+              <div style="font-size: 11px; color: #64748B; line-height: 1.5; border-top: 1px solid #E2E8F0; padding-top: 10px; display: flex; justify-content: space-between;">
+                <div>Spotless Office Solutions • Proposal & Service Agreement</div>
+                <div>Page 1 of 4</div>
+              </div>
+            </div>
+
+            <!-- ================= PAGE 2: DETAILED SCOPE OF WORK ================= -->
+            <div class="agreement-page" id="contract-page-2" style="border-bottom: 2px dashed #CBD5E1;">
+              
+              <!-- Page 2 Header -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #D4AF37; padding-bottom: 8px; margin-bottom: 16px;">
+                <div style="font-size: 14px; font-weight: 900; color: #0F172A;">SECTION I: DETAILED SCOPE OF JANITORIAL SERVICES</div>
+                <div style="font-size: 10px; color: #64748B;">Client: <b id="doc-page2-client">Apex Technology</b></div>
+              </div>
+
+              <!-- Scope Table -->
+              <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px;">
+                <thead>
+                  <tr style="background: #0F172A; color: #FFFFFF;">
+                    <th style="padding: 6px 10px; text-align: left; width: 28%;">Service Area</th>
+                    <th style="padding: 6px 10px; text-align: left; width: 57%;">Standard Janitorial Cleaning Procedures</th>
+                    <th style="padding: 6px 10px; text-align: center; width: 15%;">Frequency</th>
+                  </tr>
+                </thead>
+                <tbody style="color: #1E293B;">
+                  <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      1. Offices, Workstations & Conference Rooms
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Empty all desk, office & conference wastebaskets; replace liners.<br>
+                      • Remove designated recyclable paper & clean container bins.<br>
+                      • Wipe and sanitize open, accessible desk surfaces & conference tables.<br>
+                      • Dust accessible horizontal surfaces, credenzas & windowsills.<br>
+                      • Disinfect door handles, light switches, push bars & high-touch points.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+                  
+                  <tr style="border-bottom: 1px solid #E2E8F0;">
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      2. Floor Care & Maintenance
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Vacuum all carpeted suites, main walkways, aisles & entry floor mats.<br>
+                      • Sweep and dust-mop all hard surface floors with microfiber heads.<br>
+                      • Damp-mop hard surface floors with neutral commercial cleaner.<br>
+                      • Spot-clean normal floor spills, watermarks & scuffs where accessible.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+
+                  <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      3. Commercial Restrooms
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Clean, descale & disinfect toilet bowls, seats, urinals & hardware.<br>
+                      • Wash and sanitize sinks, faucets, counters & splash areas.<br>
+                      • Clean and polish mirrors and stainless steel/chrome fixtures.<br>
+                      • Empty sanitary receptacles and trash bins; install fresh liners.<br>
+                      • Mop and sanitize restroom floors with hospital-grade disinfectant.<br>
+                      • Restock client-provided hand soap, paper towels, and toilet tissue.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+
+                  <tr style="border-bottom: 1px solid #E2E8F0;">
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      4. Kitchens & Break Areas
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Sanitize dining tables, countertops, food prep areas & backsplashes.<br>
+                      • Wash, disinfect & polish sinks and chrome faucets.<br>
+                      • Wipe exterior surfaces of microwave, refrigerator, coffee station & cabinets.<br>
+                      • Empty all food waste bins and replace heavy-duty garbage liners.<br>
+                      • Sweep and mop breakroom hard floors with degreasing neutral cleaner.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+
+                  <tr style="border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      5. Interior Glass & Partitions
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Spot-clean interior glass entrance doors, sidelights & push plates.<br>
+                      • Remove fingerprints & smudges from interior glass conference partitions.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding: 8px 10px; font-weight: 800; color: #0F172A; vertical-align: top;">
+                      6. Waste Removal & Recycling
+                    </td>
+                    <td style="padding: 8px 10px; line-height: 1.4;">
+                      • Transport all collected bagged trash & recycling to client's onsite dumpster/chute.
+                    </td>
+                    <td style="padding: 8px 10px; text-align: center; font-weight: 700; color: #B45309; vertical-align: top;">Each Visit</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Explicit Service Exclusions Box -->
+              <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px;">
+                <div style="font-size: 11px; font-weight: 800; color: #92400E; text-transform: uppercase; margin-bottom: 4px;">Clarified Service Exclusions (Not Included in Standard Janitorial Agreement):</div>
+                <div style="font-size: 10px; color: #78350F; line-height: 1.4;">
+                  Spotless Office Solutions specializes in recurring commercial office janitorial maintenance. The following specialty services are explicitly excluded from this contract unless a separate written agreement is executed: construction debris cleanup, pressure washing, floor stripping/waxing/buffing/refinishing, machine floor restoration, exterior high-rise window washing requiring climbing equipment, washing employee dishes, cleaning inside ovens/refrigerators, and moving personal items/documents.
+                </div>
+              </div>
+
+              <!-- Page 2 Summary Footer -->
+              <div style="font-size: 11px; color: #64748B; line-height: 1.5; border-top: 1px solid #E2E8F0; padding-top: 8px; display: flex; justify-content: space-between;">
+                <div>Spotless Office Solutions • Proposal & Service Agreement</div>
+                <div>Page 2 of 4</div>
+              </div>
+            </div>
+
+            <!-- ================= PAGE 3: SERVICE TERMS & PROVISIONS ================= -->
+            <div class="agreement-page" id="contract-page-3" style="border-bottom: 2px dashed #CBD5E1;">
+              
+              <!-- Page 3 Header -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #D4AF37; padding-bottom: 8px; margin-bottom: 16px;">
+                <div style="font-size: 14px; font-weight: 900; color: #0F172A;">SECTION II: COMMERCIAL SERVICE TERMS & CONDITIONS</div>
+                <div style="font-size: 10px; color: #64748B;">Client: <b id="doc-page3-client">Apex Technology</b></div>
+              </div>
+
+              <!-- Terms Content (Clean, 2-Column Professional Typography) -->
+              <div style="font-size: 10.5px; color: #334155; line-height: 1.45; columns: 2; column-gap: 20px; text-align: justify; margin-bottom: 16px;">
+                
+                <p style="margin-bottom: 10px;">
+                  <b>1. Service Schedule & Operating Hours:</b> Spotless Office Solutions ("Company") will perform agreed janitorial services according to the contracted frequency on designated service days during agreed after-hours windows.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>2. Facility Access & Security:</b> Client agrees to provide Company personnel with necessary building keys, electronic access fobs, and security alarm arm/disarm codes. Company maintains strict key control protocols and background-screened staff.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>3. Customer Utilities & Responsibilities:</b> Client will provide continuous access to electrical outlets, running hot/cold water, custodial utility sinks, and designated onsite waste dumpsters/recycling bins at no charge to Company.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>4. Supplies & Equipment:</b> Company furnishes all commercial cleaning equipment (HEPA vacuums, mops, microfiber systems) and professional EPA-registered disinfectants. Client supplies consumable paper products, trash liners, and hand soaps unless separate consumable supply service is ordered.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>5. Invoicing & Payment Terms:</b> Invoices are generated electronically on the first (1st) business day of each service month. Payment terms are <b>Net 30 Days</b> from invoice date. Payments may be remitted via ACH, corporate check, or approved electronic transfer.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>6. Holidays & Schedule Changes:</b> Recognized legal holidays (New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas) falling on scheduled service days will be serviced on the prior or following business day by mutual coordination.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>7. Quality Guarantee & Corrections:</b> Company maintains a <b>24-Hour Quality Correction Guarantee</b>. Any service discrepancy reported within 24 hours will be inspected and corrected at no additional charge on or before the next scheduled visit.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>8. Agreement Term & Cancellation:</b> This Agreement shall remain in effect for an initial term of twelve (12) months from the Commencement Date and shall renew automatically on a month-to-month basis. Either party may terminate this Agreement without penalty upon delivering thirty (30) days advance written notice.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>9. Property Damage & Insurance:</b> Company carries comprehensive commercial general liability insurance and workers' compensation coverage. Any accidental damage to client property must be reported to Company management within 48 hours for immediate claim handling.
+                </p>
+
+                <p style="margin-bottom: 10px;">
+                  <b>10. Safety & Hazardous Conditions:</b> Company personnel are not permitted to handle biohazards, chemical spills, needles, mold remediation, or unsafe working heights. Client shall maintain a safe premises conforming to OSHA standards.
+                </p>
+              </div>
+
+              <!-- Legal Review Callout Notice -->
+              <div style="background: #F1F5F9; border-left: 3px solid #64748B; padding: 8px 12px; margin-bottom: 16px; font-size: 9.5px; color: #475569;">
+                <b>Legal Notice:</b> These commercial terms represent standard janitorial operating guidelines. Significant liability limitations, indemnification provisions, and dispute resolution terms remain subject to formal legal review per corporate counsel requirements.
+              </div>
+
+              <!-- Page 3 Summary Footer -->
+              <div style="font-size: 11px; color: #64748B; line-height: 1.5; border-top: 1px solid #E2E8F0; padding-top: 8px; display: flex; justify-content: space-between;">
+                <div>Spotless Office Solutions • Proposal & Service Agreement</div>
+                <div>Page 3 of 4</div>
+              </div>
+            </div>
+
+            <!-- ================= PAGE 4: AGREEMENT ACCEPTANCE & SIGNATURES ================= -->
+            <div class="agreement-page" id="contract-page-4">
+              
+              <!-- Page 4 Header -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #D4AF37; padding-bottom: 8px; margin-bottom: 18px;">
+                <div style="font-size: 14px; font-weight: 900; color: #0F172A;">SECTION III: AGREEMENT ACCEPTANCE & EXECUTION</div>
+                <div style="font-size: 10px; color: #64748B;">Proposal Ref: <b id="doc-page4-id">SOS-2026-8500</b></div>
+              </div>
+
+              <!-- Final Summary Table -->
+              <div style="background: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 6px; padding: 12px 16px; margin-bottom: 24px;">
+                <div style="font-size: 12px; font-weight: 900; color: #0F172A; text-transform: uppercase; margin-bottom: 8px;">Contractual Summary of Terms</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: #334155;">
+                  <div><b>Customer:</b> <span id="doc-final-client">Apex Technology</span></div>
+                  <div><b>Service Location:</b> <span id="doc-final-address">100 Commercial Plaza, Suite 400</span></div>
+                  <div><b>Cleaning Frequency:</b> <span id="doc-final-freq">3x Weekly</span></div>
+                  <div><b>Monthly Contract Investment:</b> <span id="doc-final-monthly" style="font-weight: 900; color: #B45309;">$3,955.77 / Month</span></div>
+                  <div><b>Effective Commencement:</b> <span id="doc-final-date">September 8, 2026</span></div>
+                  <div><b>Initial Agreement Term:</b> 12 Months (with 30-Day Notice)</div>
+                </div>
+              </div>
+
+              <!-- Statement of Acceptance -->
+              <div style="font-size: 11px; color: #334155; line-height: 1.5; margin-bottom: 28px;">
+                By signing below, the authorized representatives of both parties acknowledge and accept the specifications, pricing, detailed scope of services, and commercial operating terms set forth in this four-page Agreement. This document constitutes a binding commercial janitorial service agreement between the parties upon signature execution.
+              </div>
+
+              <!-- Dual Signature Block -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                
+                <!-- Client Signature Block -->
+                <div style="border-top: 2px solid #0F172A; padding-top: 10px;">
+                  <div style="font-size: 12px; font-weight: 900; color: #0F172A; text-transform: uppercase; margin-bottom: 8px;">CLIENT AUTHORIZED REPRESENTATIVE</div>
+                  
+                  <div style="height: 60px; display: flex; align-items: flex-end; margin-bottom: 6px;" id="client-sig-display">
+                    <span style="color: #94A3B8; font-style: italic; font-size: 12px;">(Client Signature)</span>
+                  </div>
+
+                  <div style="font-size: 11px; color: #334155; line-height: 1.6;">
+                    <div><b>Printed Name:</b> <span id="doc-sign-client-name">____________________________</span></div>
+                    <div><b>Title:</b> <span id="doc-sign-client-title">Operations Director / Facility Lead</span></div>
+                    <div><b>Date:</b> <span id="doc-sign-client-date">____________________________</span></div>
+                  </div>
+                </div>
+
+                <!-- Spotless Office Solutions Signature Block -->
+                <div style="border-top: 2px solid #D4AF37; padding-top: 10px;">
+                  <div style="font-size: 12px; font-weight: 900; color: #B45309; text-transform: uppercase; margin-bottom: 6px;">SPOTLESS OFFICE SOLUTIONS (AUTHORIZED)</div>
+                  
+                  <!-- Separate Signature Lines for Guy and Jacquise -->
+                  <div style="height: 50px; display: flex; align-items: flex-end; gap: 16px; margin-bottom: 6px;">
+                    <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 21px; color: #0F172A; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 2px;">Guy Chickering</div>
+                    <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 21px; color: #0F172A; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 2px;">Jacquise Arrington</div>
+                  </div>
+
+                  <div style="font-size: 10.5px; color: #334155; line-height: 1.5;">
+                    <div><b>Owner / Managing Director:</b> Guy Chickering</div>
+                    <div><b>Co-Owner / Operations Lead:</b> Jacquise Arrington</div>
+                    <div><b>Direct Phone:</b> (206) 578-0727</div>
+                    <div><b>Direct Email:</b> sos.estimator@outlook.com</div>
+                    <div><b>Execution Date:</b> <span id="doc-sign-sos-date">September 1, 2026</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Page 4 Footer -->
+              <div style="font-size: 11px; color: #64748B; line-height: 1.5; border-top: 1px solid #E2E8F0; padding-top: 10px; display: flex; justify-content: space-between;">
+                <div>Spotless Office Solutions • Proposal & Service Agreement</div>
+                <div>Page 4 of 4 (Execution)</div>
+              </div>
+
+            </div>
+
+          </div> <!-- End Print Container -->
+
+        </div> <!-- End Preview Tab -->
+
+      </div> <!-- End Modal Body -->
+
+    </div>
+  </div>
+
+  <!-- E-Signature Modal -->
+  <div id="signatureModal" class="modal-overlay" style="display: none; z-index: 1100;">
+    <div class="modal-content" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">✍️ Draw Client Signature</h3>
+        <button class="close-btn" onclick="closeModal('signatureModal')">&times;</button>
+      </div>
+      <div style="font-size: 12px; color: var(--silver); margin-bottom: 10px;">
+        Sign with your finger on mobile or mouse on PC:
+      </div>
+      
+      <!-- Canvas Signature Pad -->
+      <div style="background: #FFFFFF; border: 2px solid var(--gold); border-radius: 8px; overflow: hidden; margin-bottom: 12px; touch-action: none;">
+        <canvas id="sigCanvas" width="400" height="150" style="width: 100%; height: 150px; display: block; cursor: crosshair;"></canvas>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 12px;">
+        <label class="input-label" style="font-size: 11px;">Representative Printed Name</label>
+        <input type="text" id="sigPrintName" class="input-field" value="Operations Director" style="padding: 8px; font-size: 13px;">
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-main" onclick="applySignatureToAgreement()" style="flex: 1;">Apply Signature</button>
+        <button class="btn-main" onclick="clearSignatureCanvas()" style="background: #2D3342; color: #CBD5E1; flex: 1;">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Audit Modal -->
+  <div id="auditModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">Owner Math Audit (Confidential)</h3>
+        <button class="close-btn" onclick="closeModal('auditModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px; line-height: 1.6; color: #E2E8F0;" id="audit-details">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Adjustments Modal -->
+  <div id="advancedModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">Advanced Adjustments</h3>
+        <button class="close-btn" onclick="closeModal('advancedModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px;">
+        <div class="input-group">
+          <label class="input-label">Staircases (+8m each)</label>
+          <input type="number" id="adv-stairs" class="input-field" value="0" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Security Protocol Minutes</label>
+          <input type="number" id="adv-security" class="input-field" value="5" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Roundtrip Route Mileage ($0.67/mi)</label>
+          <input type="number" id="adv-miles" class="input-field" value="5" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <button class="btn-main" onclick="closeModal('advancedModal')">Save Adjustments</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Settings Modal -->
+  <div id="ownerModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">Company Pricing Defaults</h3>
+        <button class="close-btn" onclick="closeModal('ownerModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px;">
+        <div class="input-group">
+          <label class="input-label">Cleaner Hourly Wage ($/hr)</label>
+          <input type="number" id="set-wage" class="input-field" value="24" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Base Production Rate (sqft/hr)</label>
+          <input type="number" id="set-prod" class="input-field" value="3000" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Target Billing Rate ($/hr)</label>
+          <input type="number" id="set-bill" class="input-field" value="60" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Target Gross Margin (%)</label>
+          <input type="number" id="set-margin" class="input-field" value="40" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <div class="input-group" style="margin-top: 8px;">
+          <label class="input-label">Minimum Visit Charge Floor ($)</label>
+          <input type="number" id="set-min" class="input-field" value="125" style="padding: 10px;" onchange="calculate()">
+        </div>
+        <button class="btn-main" onclick="closeModal('ownerModal')">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Long Press Rename Modal -->
+  <div id="renameModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">✏️ Rename Field / App</h3>
+        <button class="close-btn" onclick="closeModal('renameModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px; line-height: 1.5; color: #E2E8F0;">
+        <div class="input-group">
+          <label id="renameModalLabel" class="input-label" style="color: var(--gold);">Edit Name / Title</label>
+          <input type="text" id="renameInputField" class="input-field" style="font-size: 15px; padding: 10px;">
+        </div>
+        <div id="renameSubgroup" class="input-group" style="margin-top: 10px; display: none;">
+          <label class="input-label" style="color: var(--gold);">Edit Subtitle / Tagline</label>
+          <input type="text" id="renameSubInputField" class="input-field" style="font-size: 13px; padding: 10px;">
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+          <button class="btn-main" onclick="saveRename()" style="flex: 1;">Save Name</button>
+          <button class="btn-main" onclick="resetRename()" style="background: #2D3342; color: #CBD5E1; flex: 1;">Reset Default</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Install Helper Modal -->
+  <div id="installHelperModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">★ App Downloaded!</h3>
+        <button class="close-btn" onclick="closeModal('installHelperModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px; line-height: 1.6; color: #E2E8F0;">
+        <div style="background: rgba(212,175,55,0.1); border: 1px solid var(--gold); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+          <b style="color: var(--gold); font-size: 14px;">📥 SOS_Estimator.html is saved to your phone!</b>
+          <div style="font-size: 11px; color: #CBD5E1; margin-top: 4px;">You can open it from your phone's Downloads folder anytime 100% offline!</div>
+        </div>
+        
+        <div style="font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">To put the SOS Estimator icon on your screen:</div>
+        <div style="margin-bottom: 8px;">
+          <b>• Android (Samsung):</b> Tap menu (⋮ or ☰) &rarr; tap <b>Add to Home screen</b>.
+        </div>
+        <div style="margin-bottom: 14px;">
+          <b>• Apple iPhone:</b> Tap Safari's <b>Share</b> button (square with arrow up) &rarr; tap <b>Add to Home Screen</b>.
+        </div>
+        
+        <button class="btn-main" onclick="closeModal('installHelperModal')">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save to Phone Helper Modal -->
+  <div id="saveHelperModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 style="font-weight: 900; color: var(--gold);">💾 Contract Saved to Phone!</h3>
+        <button class="close-btn" onclick="closeModal('saveHelperModal')">&times;</button>
+      </div>
+      <div style="font-size: 13px; line-height: 1.6; color: #E2E8F0;">
+        <div style="background: rgba(16,185,129,0.15); border: 1.5px solid #10B981; border-radius: 10px; padding: 14px; margin-bottom: 14px; text-align: center;">
+          <div style="font-size: 26px; margin-bottom: 4px;">✅</div>
+          <b style="color: #34D399; font-size: 15px;">Downloaded to Your Phone Files!</b>
+          <div id="saveModalFileName" style="font-size: 12px; color: #FFFFFF; font-weight: 800; margin-top: 4px; word-break: break-all;">SOS_Agreement_Client.html</div>
+        </div>
+
+        <div style="font-weight: 900; color: var(--gold); margin-bottom: 8px; font-size: 14px;">📁 How to Open or View It:</div>
+        
+        <div style="background: #1A1D24; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border-left: 3px solid #38BDF8;">
+          <b style="color: #38BDF8;">📱 Samsung / Android Phones:</b><br>
+          1. Open your phone's <b>My Files</b> (or <b>Files</b>) app.<br>
+          2. Tap the <b>Downloads</b> folder.<br>
+          3. Tap the file to view, print, or attach to email anytime!
+        </div>
+
+        <div style="background: #1A1D24; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; border-left: 3px solid #A78BFA;">
+          <b style="color: #A78BFA;">🍏 Apple iPhones / iPads:</b><br>
+          1. Open the <b>Files</b> app &rarr; tap <b>Downloads</b>.<br>
+          2. <i>Tip:</i> To save as a pure PDF, tap <b>🖨️ Print (PDF)</b> &rarr; pinch out on the preview &rarr; tap <b>Save to Files</b>.
+        </div>
+
+        <button class="btn-main" onclick="closeModal('saveHelperModal')">Got It, Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let restrooms = 4;
+    let kitchens = 2;
+    let occupants = 65;
+    let visitsPerWeek = 3;
+    let difficulty = 'normal';
+    let generatedProposalId = null;
+
+    function changeStep(type, delta) {
+      if (type === 'restrooms') {
+        restrooms = Math.max(0, restrooms + delta);
+        document.getElementById('input-restrooms').value = restrooms;
+      } else if (type === 'kitchens') {
+        kitchens = Math.max(0, kitchens + delta);
+        document.getElementById('input-kitchens').value = kitchens;
+      } else if (type === 'occupants') {
+        occupants = Math.max(0, occupants + delta);
+        document.getElementById('input-occupants').value = occupants;
+      }
+    }
+
+    // ==========================================
+    // LONG PRESS TO RENAME APP & INPUTS
+    // ==========================================
+    let currentRenameTarget = null;
+    let longPressTimer = null;
+
+    function initLongPressRenaming() {
+      // Load saved names from localStorage
+      const elements = document.querySelectorAll('[data-rename-key]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-rename-key');
+        const saved = localStorage.getItem('spotless_rename_' + key);
+        if (saved) {
+          if (key === 'app_header_title') {
+            try {
+              const data = JSON.parse(saved);
+              document.getElementById('txt-brand-main').innerText = data.main || 'Spotless Office Solutions';
+              document.getElementById('txt-brand-sub').innerText = data.sub || 'SOS Commercial Estimator';
+            } catch(e){}
+          } else {
+            el.innerText = saved;
+          }
+        }
+
+        // Attach touch & mouse long-press handlers
+        const startHandler = (e) => {
+          longPressTimer = setTimeout(() => {
+            triggerRenameModal(el, key);
+          }, 600); // 600ms hold
+        };
+
+        const cancelHandler = () => {
+          if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+          }
+        };
+
+        el.addEventListener('touchstart', startHandler, { passive: true });
+        el.addEventListener('touchend', cancelHandler);
+        el.addEventListener('touchmove', cancelHandler);
+        el.addEventListener('mousedown', startHandler);
+        el.addEventListener('mouseup', cancelHandler);
+        el.addEventListener('mouseleave', cancelHandler);
+      });
+    }
+
+    function triggerRenameModal(el, key) {
+      currentRenameTarget = { el, key };
+      const modal = document.getElementById('renameModal');
+      const input = document.getElementById('renameInputField');
+      const subGroup = document.getElementById('renameSubgroup');
+      const subInput = document.getElementById('renameSubInputField');
+      const label = document.getElementById('renameModalLabel');
+
+      if (key === 'app_header_title') {
+        label.innerText = 'Rename App / Business Header';
+        input.value = document.getElementById('txt-brand-main').innerText;
+        subGroup.style.display = 'block';
+        subInput.value = document.getElementById('txt-brand-sub').innerText;
+      } else {
+        label.innerText = 'Rename Field Label';
+        input.value = el.innerText;
+        subGroup.style.display = 'none';
+      }
+
+      openModal('renameModal');
+    }
+
+    function saveRename() {
+      if (!currentRenameTarget) return;
+      const { el, key } = currentRenameTarget;
+      const input = document.getElementById('renameInputField');
+      const subInput = document.getElementById('renameSubInputField');
+
+      if (key === 'app_header_title') {
+        const mainVal = input.value.trim() || 'Spotless Office Solutions';
+        const subVal = subInput.value.trim() || 'SOS Commercial Estimator';
+        document.getElementById('txt-brand-main').innerText = mainVal;
+        document.getElementById('txt-brand-sub').innerText = subVal;
+        localStorage.setItem('spotless_rename_' + key, JSON.stringify({ main: mainVal, sub: subVal }));
+      } else {
+        const val = input.value.trim();
+        if (val) {
+          el.innerText = val;
+          localStorage.setItem('spotless_rename_' + key, val);
+        }
+      }
+      closeModal('renameModal');
+    }
+
+    function resetRename() {
+      if (!currentRenameTarget) return;
+      const { el, key } = currentRenameTarget;
+      localStorage.removeItem('spotless_rename_' + key);
+      
+      if (key === 'app_header_title') {
+        document.getElementById('txt-brand-main').innerText = 'Spotless Office Solutions';
+        document.getElementById('txt-brand-sub').innerText = 'SOS Commercial Estimator';
+      } else if (key === 'label-sqft') {
+        el.innerText = '1. Total Office Cleanable Area (Sq Ft) *';
+      } else if (key === 'label-restrooms') {
+        el.innerText = '2. Restrooms';
+      } else if (key === 'label-kitchens') {
+        el.innerText = '3. Kitchens / Break Areas';
+      } else if (key === 'label-occupants') {
+        el.innerText = '4. Estimated Staff / Occupants';
+      } else if (key === 'label-billrate') {
+        el.innerText = '5. Target Hourly Billing Rate ($/hr)';
+      } else if (key === 'label-freq') {
+        el.innerText = '6. Cleanings Per Week';
+      } else if (key === 'label-diff') {
+        el.innerText = '7. Cleaning Difficulty / Condition';
+      }
+      closeModal('renameModal');
+    }
+
+    // Initialize long-press when page loads
+    initLongPressRenaming();
+
+    function updateFromInput(type) {
+      if (type === 'restrooms') {
+        restrooms = Math.max(0, parseInt(document.getElementById('input-restrooms').value) || 0);
+      } else if (type === 'kitchens') {
+        kitchens = Math.max(0, parseInt(document.getElementById('input-kitchens').value) || 0);
+      } else if (type === 'occupants') {
+        occupants = Math.max(0, parseInt(document.getElementById('input-occupants').value) || 0);
+      }
+    }
+
+    function setFreq(f) {
+      visitsPerWeek = f;
+      document.querySelectorAll('#freq-pills .pill-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx + 1 === f);
+      });
+      const monthlyVisits = (visitsPerWeek * 52 / 12).toFixed(1);
+      document.getElementById('monthly-visits-hint').innerText = `${monthlyVisits} visits / mo`;
+    }
+
+    function setDiff(d) {
+      difficulty = d;
+      document.getElementById('diff-light').classList.toggle('active', d === 'light');
+      document.getElementById('diff-normal').classList.toggle('active', d === 'normal');
+      document.getElementById('diff-heavy').classList.toggle('active', d === 'heavy');
+    }
+
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    }
+
+    function calculate() {
+      const calcBtn = document.getElementById('btn-main-calculate');
+      if (calcBtn) {
+        calcBtn.innerHTML = '✓ QUOTE CALCULATED';
+        calcBtn.style.background = '#10B981';
+        calcBtn.style.color = '#FFFFFF';
+        setTimeout(() => {
+          if (calcBtn) {
+            calcBtn.innerHTML = '⚡ CALCULATE QUOTE';
+            calcBtn.style.background = 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)';
+            calcBtn.style.color = '#000000';
+          }
+        }, 1200);
+      }
+
+      const sqft = parseFloat(document.getElementById('sqFt').value) || 0;
+      const wage = parseFloat(document.getElementById('set-wage').value) || 24.0;
+      const prodRate = parseFloat(document.getElementById('set-prod').value) || 3000.0;
+      const billRate = parseFloat(document.getElementById('hourlyRate').value) || parseFloat(document.getElementById('set-bill').value) || 60.0;
+      document.getElementById('set-bill').value = billRate;
+      const targetMargin = (parseFloat(document.getElementById('set-margin').value) || 40.0) / 100.0;
+      const minCharge = parseFloat(document.getElementById('set-min').value) || 125.0;
+
+      const stairs = parseFloat(document.getElementById('adv-stairs').value) || 0;
+      const security = parseFloat(document.getElementById('adv-security').value) || 5;
+      const miles = parseFloat(document.getElementById('adv-miles').value) || 5;
+
+      if (sqft <= 0) return;
+
+      // 1. Labor Formula
+      const baseMinutes = (sqft / prodRate) * 60.0;
+      const toilets = Math.ceil(restrooms * 1.5);
+      const urinals = Math.floor(restrooms * 0.5);
+      const sinks = Math.ceil(restrooms * 1.5);
+      const restroomMinutes = (toilets * 5.0) + (urinals * 3.0) + (sinks * 2.0);
+      const breakroomMinutes = kitchens * 10.0;
+      const confMinutes = Math.floor(sqft / 2500) * 3.0;
+      const entranceMinutes = 5.0;
+      const stairMinutes = stairs * 8.0;
+
+      const subtotalMinutes = baseMinutes + restroomMinutes + breakroomMinutes + confMinutes + entranceMinutes + stairMinutes + security;
+
+      let trafficMult = 1.05;
+      if (occupants > 75) trafficMult = 1.25;
+      else if (occupants > 40) trafficMult = 1.15;
+      else if (occupants < 10) trafficMult = 1.00;
+
+      let diffMult = 1.00;
+      if (difficulty === 'light') diffMult = 0.95;
+      else if (difficulty === 'heavy') diffMult = 1.20;
+
+      const compositeMultiplier = trafficMult * diffMult;
+      const finalMinutes = subtotalMinutes * compositeMultiplier;
+      const laborHours = Math.max(0.5, finalMinutes / 60.0);
+
+      // 2. Cost Engine
+      const directLabor = laborHours * wage;
+      const burden = directLabor * 0.18; // 18% burden
+      const supplies = directLabor * 0.05;
+      const equip = directLabor * 0.03;
+      const travelCost = miles * 0.67;
+      const overhead = directLabor * 0.12;
+      const trueCost = directLabor + burden + supplies + equip + travelCost + overhead;
+
+      // 3. Pricing Engine (Three References)
+      const priceA = laborHours * billRate;
+      const priceB = trueCost / Math.max(0.05, 1.0 - targetMargin);
+      const priceC = minCharge;
+
+      const finalPrice = Math.max(priceA, priceB, priceC);
+      const profit = finalPrice - trueCost;
+      const marginPct = (profit / finalPrice) * 100.0;
+
+      // 4. Contract Rollups
+      const avgMonthlyVisits = (visitsPerWeek * 52.0) / 12.0;
+      const monthlyContract = finalPrice * avgMonthlyVisits;
+      const monthlyHours = laborHours * avgMonthlyVisits;
+      const monthlyCost = trueCost * avgMonthlyVisits;
+      const monthlyProfit = profit * avgMonthlyVisits;
+
+      // Update UI
+      document.getElementById('res-monthly').innerHTML = `$${monthlyContract.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span style="font-size: 15px; color: #FFFFFF; font-weight: 700;">/ mo</span>`;
+      document.getElementById('res-per-visit').innerText = `$${finalPrice.toFixed(2)} per visit (${visitsPerWeek}x weekly)`;
+      document.getElementById('res-hours').innerText = `${laborHours.toFixed(2)} hrs (${finalMinutes.toFixed(0)}m)`;
+      document.getElementById('res-monthly-hours').innerText = `${monthlyHours.toFixed(1)} hrs`;
+      document.getElementById('res-profit').innerText = `$${monthlyProfit.toFixed(2)}`;
+      document.getElementById('res-cost').innerText = `$${trueCost.toFixed(2)}`;
+      document.getElementById('res-monthly-cost').innerText = `$${monthlyCost.toFixed(2)}`;
+      document.getElementById('res-margin').innerText = `${marginPct.toFixed(1)}%`;
+
+      const badge = document.getElementById('margin-badge');
+      if (marginPct >= 35) {
+        badge.className = 'badge badge-green';
+        badge.innerText = `GREEN (${marginPct.toFixed(1)}%)`;
+      } else if (marginPct >= 25) {
+        badge.className = 'badge badge-yellow';
+        badge.innerText = `YELLOW (${marginPct.toFixed(1)}%)`;
+      } else {
+        badge.className = 'badge badge-red';
+        badge.innerText = `RED (${marginPct.toFixed(1)}%)`;
+      }
+
+      // Proposal Modal updates
+      const comp = document.getElementById('companyName') ? document.getElementById('companyName').value : 'Commercial Client';
+      if (document.getElementById('prop-client')) document.getElementById('prop-client').innerText = comp;
+      if (document.getElementById('prop-scope')) document.getElementById('prop-scope').innerHTML = `• ${sqft.toLocaleString()} sq ft Office Cleaning (${visitsPerWeek}x Weekly)<br>• ${restrooms} Restrooms & ${kitchens} Breakrooms<br>• Surface sanitization, waste collection & vacuum/mopping`;
+      if (document.getElementById('prop-price-visit')) document.getElementById('prop-price-visit').innerText = `$${finalPrice.toFixed(2)}`;
+      if (document.getElementById('prop-monthly')) document.getElementById('prop-monthly').innerText = `$${monthlyContract.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+      // Update 4-Page Commercial Agreement
+      try {
+        updateAgreementPreview();
+      } catch(e) {
+        console.log('updateAgreementPreview note:', e);
+      }
+
+      // Audit Modal updates
+      document.getElementById('audit-details').innerHTML = `
+        <b style="color: var(--gold);">1. Labor Breakdown:</b><br>
+        • Base Cleaning (${sqft} sqft @ ${prodRate} sqft/hr): ${baseMinutes.toFixed(1)}m<br>
+        • Restrooms (${restrooms} rooms, ${toilets}T, ${urinals}U, ${sinks}S): ${restroomMinutes.toFixed(1)}m<br>
+        • Breakrooms (${kitchens}): ${breakroomMinutes.toFixed(1)}m<br>
+        • Conference & Entrances: ${(confMinutes + entranceMinutes).toFixed(1)}m<br>
+        • Security Access: ${security}m<br>
+        • Multipliers: ${trafficMult}x traffic × ${diffMult}x condition = ${compositeMultiplier.toFixed(3)}x<br>
+        • <b>Total Labor Time:</b> ${finalMinutes.toFixed(1)}m (<b style="color: var(--gold);">${laborHours.toFixed(2)} hrs</b>)<br><br>
+        <b style="color: var(--gold);">2. True Cost Breakdown ($${wage.toFixed(2)}/hr wage):</b><br>
+        • Direct Cleaner Wages: $${directLabor.toFixed(2)}<br>
+        • Payroll Burden (18%): $${burden.toFixed(2)}<br>
+        • Supplies (5%): $${supplies.toFixed(2)}<br>
+        • Equipment (3%): $${equip.toFixed(2)}<br>
+        • Overhead (12%): $${overhead.toFixed(2)}<br>
+        • Route Travel (${miles} mi): $${travelCost.toFixed(2)}<br>
+        • <b>True Operating Cost:</b> $${trueCost.toFixed(2)} / visit<br><br>
+        <b style="color: var(--gold);">3. Three Reference Prices:</b><br>
+        • Ref A (Billing Rate $${billRate}/hr): $${priceA.toFixed(2)}<br>
+        • Ref B (Target Margin ${targetMargin*100}%): $${priceB.toFixed(2)}<br>
+        • Ref C (Min Floor): $${priceC.toFixed(2)}<br>
+        • <b style="color: var(--gold);">Final Price Selected:</b> $${finalPrice.toFixed(2)} / visit
+      `;
+    }
+
+    calculate();
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btn-install-app');
+      if (btn) btn.innerText = '⬇️ Install App';
+    });
+
+    function downloadAppFile() {
+      const a = document.createElement('a');
+      a.href = './SOS_Estimator.html';
+      a.download = 'SOS_Estimator.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      openModal('installHelperModal');
+    }
+
+    function triggerInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            document.getElementById('install-banner').style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        downloadAppFile();
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        console.log('Spotless offline Service Worker active!', reg.scope);
+      }).catch((err) => {
+        console.log('Service Worker registration note:', err);
+      });
+    }
+  
+    // ==============================================================
+    // 4-PAGE COMMERCIAL PROPOSAL & AGREEMENT JAVASCRIPT ENGINE
+    // ==============================================================
+
+    function getFormattedDate(d = new Date()) {
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function getNextServiceMonday() {
+      const d = new Date();
+      const day = d.getDay();
+      const diff = d.getDate() + ((7 - day + 1) % 7 || 7);
+      const nextMon = new Date(d.setDate(diff));
+      return nextMon.toISOString().split('T')[0];
+    }
+
+    function switchProposalTab(tab) {
+      const scopeTab = document.getElementById('proposal-scope-tab');
+      const previewTab = document.getElementById('proposal-preview-tab');
+      const btnPreview = document.getElementById('tab-btn-preview');
+      const btnScope = document.getElementById('tab-btn-scope');
+
+      if (tab === 'scope') {
+        scopeTab.style.display = 'block';
+        previewTab.style.display = 'none';
+        btnScope.style.background = 'var(--gold)';
+        btnScope.style.color = '#000';
+        btnPreview.style.background = '#2D3342';
+        btnPreview.style.color = '#CBD5E1';
+      } else {
+        scopeTab.style.display = 'none';
+        previewTab.style.display = 'block';
+        btnPreview.style.background = 'var(--gold)';
+        btnPreview.style.color = '#000';
+        btnScope.style.background = '#2D3342';
+        btnScope.style.color = '#CBD5E1';
+        updateAgreementPreview();
+      }
+    }
+
+    function updateAgreementPreview() {
+      const clientName = document.getElementById('companyName').value.trim() || 'Commercial Client';
+      const inputClient = document.getElementById('prop-input-client');
+      if (inputClient && !inputClient.value) {
+        inputClient.value = clientName;
+      }
+      const finalClient = (inputClient && inputClient.value.trim()) ? inputClient.value.trim() : clientName;
+
+      const address = document.getElementById('prop-input-address') ? document.getElementById('prop-input-address').value : '100 Commercial Plaza, Suite 400';
+      const contact = document.getElementById('prop-input-contact') ? document.getElementById('prop-input-contact').value : 'Operations Manager';
+      
+      const startDateInput = document.getElementById('prop-input-startdate');
+      if (startDateInput && !startDateInput.value) {
+        startDateInput.value = getNextServiceMonday();
+      }
+      const startDateVal = (startDateInput && startDateInput.value) ? new Date(startDateInput.value + 'T00:00:00') : new Date();
+      const formattedStartDate = getFormattedDate(startDateVal);
+
+      if (!generatedProposalId) {
+        const sq = parseInt(document.getElementById('sqFt').value) || 8500;
+        generatedProposalId = 'SOS-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      }
+
+      const sqFtVal = parseInt(document.getElementById('sqFt').value) || 8500;
+      const visitPrice = document.getElementById('disp-price-visit') ? document.getElementById('disp-price-visit').innerText : '$304.29';
+      const monthlyPrice = document.getElementById('disp-monthly-total') ? document.getElementById('disp-monthly-total').innerText : '$3,955.77';
+
+      // Update Page 1
+      if (document.getElementById('doc-prop-id')) document.getElementById('doc-prop-id').innerText = generatedProposalId;
+      if (document.getElementById('doc-prop-date')) document.getElementById('doc-prop-date').innerText = getFormattedDate();
+      if (document.getElementById('doc-client-name')) document.getElementById('doc-client-name').innerText = finalClient;
+      if (document.getElementById('doc-client-address')) document.getElementById('doc-client-address').innerText = address;
+      if (document.getElementById('doc-client-contact')) document.getElementById('doc-client-contact').innerText = contact;
+      if (document.getElementById('doc-sqft')) document.getElementById('doc-sqft').innerText = sqFtVal.toLocaleString() + ' Sq Ft';
+      if (document.getElementById('doc-restrooms')) document.getElementById('doc-restrooms').innerText = restrooms + ' Fixture Areas';
+      if (document.getElementById('doc-kitchens')) document.getElementById('doc-kitchens').innerText = kitchens;
+      if (document.getElementById('doc-occupants')) document.getElementById('doc-occupants').innerText = occupants + ' Personnel';
+      const freqVal = (typeof visitsPerWeek !== 'undefined') ? visitsPerWeek : 3;
+      if (document.getElementById('doc-freq-label')) document.getElementById('doc-freq-label').innerText = freqVal + 'x Cleanings Per Week';
+      if (document.getElementById('doc-start-date')) document.getElementById('doc-start-date').innerText = formattedStartDate;
+      if (document.getElementById('doc-price-visit')) document.getElementById('doc-price-visit').innerText = visitPrice;
+      if (document.getElementById('doc-price-monthly')) document.getElementById('doc-price-monthly').innerText = monthlyPrice;
+
+      // Update Page 2 & 3
+      if (document.getElementById('doc-page2-client')) document.getElementById('doc-page2-client').innerText = finalClient;
+      if (document.getElementById('doc-page3-client')) document.getElementById('doc-page3-client').innerText = finalClient;
+
+      // Update Page 4
+      if (document.getElementById('doc-page4-id')) document.getElementById('doc-page4-id').innerText = generatedProposalId;
+      if (document.getElementById('doc-final-client')) document.getElementById('doc-final-client').innerText = finalClient;
+      if (document.getElementById('doc-final-address')) document.getElementById('doc-final-address').innerText = address;
+      if (document.getElementById('doc-final-freq')) document.getElementById('doc-final-freq').innerText = freqVal + 'x Weekly';
+      if (document.getElementById('doc-final-monthly')) document.getElementById('doc-final-monthly').innerText = monthlyPrice + ' / Month';
+      if (document.getElementById('doc-final-date')) document.getElementById('doc-final-date').innerText = formattedStartDate;
+      if (document.getElementById('doc-sign-sos-date')) document.getElementById('doc-sign-sos-date').innerText = getFormattedDate();
+      if (document.getElementById('doc-sign-client-date')) document.getElementById('doc-sign-client-date').innerText = getFormattedDate();
+      
+      const printName = document.getElementById('sigPrintName') ? document.getElementById('sigPrintName').value : contact;
+      if (document.getElementById('doc-sign-client-name')) document.getElementById('doc-sign-client-name').innerText = printName || contact;
+    }
+
+    // Override openModal for proposalModal to auto-populate
+    const originalOpenModal = window.openModal;
+    window.openModal = function(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) {
+        m.style.display = 'flex';
+      }
+      if (modalId === 'proposalModal') {
+        try {
+          updateAgreementPreview();
+          initSignatureCanvas();
+        } catch(err) {
+          console.log('updateAgreementPreview note:', err);
+        }
+      }
+      if (typeof originalOpenModal === 'function') {
+        try { originalOpenModal(modalId); } catch(e){}
+      }
+    };
+
+    window.closeModal = function(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) {
+        m.style.display = 'none';
+      }
+    };
+
+    function printAgreementDocument() {
+      updateAgreementPreview();
+      const btn = document.getElementById('btn-print-agreement');
+      if (btn) {
+        btn.innerHTML = '🔄 Opening Printer...';
+        btn.style.background = '#10B981';
+        btn.style.color = '#FFFFFF';
+        setTimeout(() => {
+          if (btn) {
+            btn.innerHTML = '🖨️ Print Agreement (PDF)';
+            btn.style.background = 'linear-gradient(135deg, #F59E0B 0%, #D4AF37 100%)';
+            btn.style.color = '#000000';
+          }
+        }, 3000);
+      }
+
+      // Ensure preview tab is active
+      const scopeTab = document.getElementById('proposal-scope-tab');
+      const previewTab = document.getElementById('proposal-preview-tab');
+      if (scopeTab) scopeTab.style.display = 'none';
+      if (previewTab) previewTab.style.display = 'block';
+
+      // 1. Synchronous native print
+      try {
+        window.print();
+      } catch(e) {
+        console.log('Native print note:', e);
+      }
+    }
+
+    function downloadContractHtml() {
+      updateAgreementPreview();
+      const btn = document.getElementById('btn-save-agreement');
+      if (btn) {
+        btn.innerHTML = '✓ Saved to Files!';
+        btn.style.background = '#10B981';
+        btn.style.color = '#FFFFFF';
+        btn.style.borderColor = '#059669';
+        setTimeout(() => {
+          if (btn) {
+            btn.innerHTML = '💾 Save to Files';
+            btn.style.background = '#1E293B';
+            btn.style.color = '#38BDF8';
+            btn.style.borderColor = '#0284C7';
+          }
+        }, 3000);
+      }
+
+      const client = (document.getElementById('doc-client-name') ? document.getElementById('doc-client-name').innerText : 'Client').replace(/[^a-zA-Z0-9]/g, '_');
+      const content = document.getElementById('print-agreement-container').innerHTML;
+      const fullDoc = '<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>Spotless Office Solutions Commercial Agreement - ' + client + '</title>\n  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">\n  <style>\n    @page { size: letter portrait; margin: 0.3in 0.4in; }\n    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0F172A; background: #FFFFFF; margin: 0; padding: 16px; }\n    .agreement-page { width: 100%; min-height: 9.8in; padding: 0.2in 0; page-break-after: always; }\n    .agreement-page:last-child { page-break-after: auto; }\n    table { width: 100%; border-collapse: collapse; }\n    .print-bar { position: sticky; top: 0; background: #0F172A; color: #D4AF37; padding: 12px; text-align: center; font-weight: 800; border-radius: 8px; margin-bottom: 15px; cursor: pointer; }\n    @media print { .print-bar { display: none !important; } body { padding: 0; } }\n  </style>\n  <link rel="manifest" href="manifest.json?v=116">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=116">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=116">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=116">
+  <link rel="apple-touch-icon" href="icon-512.png?v=116">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=116">
+  <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png?v=116">
+</head>\n<body>\n  <div class="print-bar" onclick="window.print()">🖨️ TAP HERE TO PRINT / SAVE PDF</div>\n' + content + '\n  <script src="sos_pwa_push.js"></script>
+  <script src="sos_alert_hub.js"></script>
+</body>\n</html>';
+      const blob = new Blob([fullDoc], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SOS_Agreement_${client}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      const fileLabel = document.getElementById('saveModalFileName');
+      if (fileLabel) fileLabel.innerText = `SOS_Agreement_${client}.html`;
+      openModal('saveHelperModal');
+    }
+
+    function shareAgreementDocument() {
+      updateAgreementPreview();
+      const btn = document.getElementById('btn-share-agreement');
+      if (btn) {
+        btn.innerHTML = '✓ Sharing...';
+        btn.style.background = '#10B981';
+        btn.style.color = '#FFFFFF';
+        setTimeout(() => {
+          if (btn) {
+            btn.innerHTML = '📲 Share / Save';
+            btn.style.background = '#2D3342';
+            btn.style.color = '#FFFFFF';
+          }
+        }, 3000);
+      }
+
+      const client = document.getElementById('doc-client-name') ? document.getElementById('doc-client-name').innerText : 'Commercial Client';
+      const monthly = document.getElementById('doc-price-monthly') ? document.getElementById('doc-price-monthly').innerText : '$0.00';
+      const propId = document.getElementById('doc-prop-id') ? document.getElementById('doc-prop-id').innerText : 'SOS-2026';
+      const shareTitle = `Spotless Office Solutions Commercial Agreement - ${client}`;
+      const shareText = `Spotless Office Solutions Commercial Cleaning Proposal & Agreement (${propId})\nClient: ${client}\nMonthly Contract: ${monthly}\nDate: ${getFormattedDate()}\n\nView Agreement: ${window.location.href}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: window.location.href
+        }).catch((err) => {
+          console.log('Native share canceled/fallback:', err);
+          downloadContractHtml();
+        });
+      } else {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareText).then(() => {
+            alert('✓ Agreement summary and link copied to clipboard! You can paste and send via message or email.');
+          }).catch(() => {});
+        }
+        downloadContractHtml();
+      }
+    }
+
+    // ==============================================================
+    // HTML5 TOUCH & MOUSE E-SIGNATURE PAD
+    // ==============================================================
+    let isDrawing = false;
+    let sigCanvas, sigCtx;
+
+    function initSignatureCanvas() {
+      sigCanvas = document.getElementById('sigCanvas');
+      if (!sigCanvas) return;
+      sigCtx = sigCanvas.getContext('2d');
+      sigCtx.strokeStyle = '#0F172A';
+      sigCtx.lineWidth = 2.5;
+      sigCtx.lineCap = 'round';
+      sigCtx.lineJoin = 'round';
+
+      function getPos(e) {
+        const rect = sigCanvas.getBoundingClientRect();
+        if (e.touches && e.touches[0]) {
+          return {
+            x: (e.touches[0].clientX - rect.left) * (sigCanvas.width / rect.width),
+            y: (e.touches[0].clientY - rect.top) * (sigCanvas.height / rect.height)
+          };
+        }
+        return {
+          x: (e.clientX - rect.left) * (sigCanvas.width / rect.width),
+          y: (e.clientY - rect.top) * (sigCanvas.height / rect.height)
+        };
+      }
+
+      function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        sigCtx.beginPath();
+        sigCtx.moveTo(pos.x, pos.y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        sigCtx.lineTo(pos.x, pos.y);
+        sigCtx.stroke();
+      }
+
+      function endDraw() {
+        if (isDrawing) {
+          isDrawing = false;
+        }
+      }
+
+      sigCanvas.onmousedown = startDraw;
+      sigCanvas.onmousemove = draw;
+      sigCanvas.onmouseup = endDraw;
+      sigCanvas.onmouseleave = endDraw;
+
+      sigCanvas.ontouchstart = (e) => { e.preventDefault(); startDraw(e); };
+      sigCanvas.ontouchmove = (e) => { e.preventDefault(); draw(e); };
+      sigCanvas.ontouchend = (e) => { e.preventDefault(); endDraw(e); };
+    }
+
+    function openSignatureModal() {
+      openModal('signatureModal');
+      setTimeout(initSignatureCanvas, 100);
+    }
+
+    function clearSignatureCanvas() {
+      if (sigCanvas && sigCtx) {
+        sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      }
+    }
+
+function emailContractToBusiness() {
+  const clientName = document.getElementById('client-name') ? document.getElementById('client-name').value.trim() || 'Valued Client' : 'Valued Client';
+  const facilityAddr = document.getElementById('client-address') ? document.getElementById('client-address').value.trim() || 'On File' : 'On File';
+  const monthlyTotal = document.getElementById('val-monthly-total') ? document.getElementById('val-monthly-total').innerText : '$0.00';
+  const initialTotal = document.getElementById('val-initial-total') ? document.getElementById('val-initial-total').innerText : '$0.00';
+  const signName = document.getElementById('doc-sign-client-name') ? document.getElementById('doc-sign-client-name').innerText : 'Authorized Client Representative';
+  const signDate = document.getElementById('doc-sign-client-date') ? document.getElementById('doc-sign-client-date').innerText : new Date().toLocaleDateString();
+
+  const subject = "SIGNED COMMERCIAL CONTRACT: " + clientName + " (" + monthlyTotal + "/mo)";
+  const body = "SPOTLESS OFFICE SOLUTIONS LLC - SIGNED COMMERCIAL SERVICE CONTRACT%0D%0A%0D%0A" +
+    "CLIENT ACCOUNT INFORMATION:%0D%0A" +
+    "• Client Company: " + clientName + "%0D%0A" +
+    "• Facility Address: " + facilityAddr + "%0D%0A" +
+    "• Monthly Service Fee: " + monthlyTotal + " / month%0D%0A" +
+    "• Initial Deep Clean: " + initialTotal + "%0D%0A%0D%0A" +
+    "E-SIGNATURE & EXECUTION:%0D%0A" +
+    "• Signed By: " + signName + "%0D%0A" +
+    "• Execution Date: " + signDate + "%0D%0A" +
+    "• Service Provider: Spotless Office Solutions LLC%0D%0A" +
+    "• Primary Contact: Guy Chickering & Jacquise Arrington ((206) 578-0727)%0D%0A" +
+    "• Master Estimator Email: sos.estimator@outlook.com%0D%0A%0D%0A" +
+    "STATUS: Signed Contract Executed and Logged.%0D%0A";
+
+  const mailtoUrl = "mailto:sos.estimator@outlook.com?subject=" + encodeURIComponent(subject) + "&body=" + body;
+  
+  const a = document.createElement('a');
+  a.href = mailtoUrl;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function applySignatureToAgreement() {
+  if (!sigCanvas) return;
+  const dataUrl = sigCanvas.toDataURL('image/png');
+  const sigDisplay = document.getElementById('client-sig-display');
+  const printName = document.getElementById('sigPrintName').value.trim() || 'Operations Director';
+  
+  if (sigDisplay) {
+    sigDisplay.innerHTML = '<img src="' + dataUrl + '" style="height: 50px; max-width: 200px; object-fit: contain;">';
+  }
+  if (document.getElementById('doc-sign-client-name')) {
+    document.getElementById('doc-sign-client-name').innerText = printName;
+  }
+  if (document.getElementById('doc-sign-client-date')) {
+    document.getElementById('doc-sign-client-date').innerText = getFormattedDate();
+  }
+  closeModal('signatureModal');
+  switchProposalTab('preview');
+  
+  setTimeout(function() {
+    emailContractToBusiness();
+  }, 300);
+}
+
+  </script>
+  <script src="sos_pwa_push.js"></script>
+  <script src="sos_alert_hub.js"></script>
+</body>
+</html>
