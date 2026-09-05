@@ -7,14 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>SOS Estimator</title>
-  <meta name="apple-mobile-web-app-title" content="SOS Estimator Pro">
-  <meta name="application-name" content="SOS Estimator Pro">
-  <title>SOS Estimator Pro</title>
-
-  <!-- PWA Manifest & Icons -->
-  <link rel="manifest" href="manifest.json?v=501">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=501">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=501">
+  <meta name="apple-mobile-web-app-title" content="SOS Estimator">
+  <meta name="application-name" content="SOS Estimator">
   <style>
     :root {
       --bg: #090A0D;             /* Deep Pitch Onyx Black */
@@ -570,39 +564,66 @@
       </div>
     </div>
 
-    <!-- Input 4: Office Staff & Occupancy (Directly Editable) -->
+    <!-- Input 4: Office Staff & Occupancy -->
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">4. Estimated Staff / Office Occupants</label>
+        <label class="input-label" style="margin-bottom: 0;">4. Staff / Occupants & Workstations</label>
         <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Type or tap + / −</span>
       </div>
-      <div class="stepper-control" style="background: var(--silver-light); padding: 6px;">
+      <div class="stepper-control" style="background: var(--silver-light); padding: 6px; margin-bottom: 12px;">
         <button class="step-btn" onclick="changeStep('occupants', -1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">−</button>
         <div style="display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1;">
-          <input type="number" id="input-occupants" class="step-input" value="65" min="0" style="font-size: 26px; width: 90px; text-align: center;" oninput="updateFromInput('occupants')">
-          <span style="font-size: 13px; color: var(--text-sub); font-weight: 700;">people</span>
+          <input type="number" id="input-occupants" class="step-input" value="30" min="0" style="font-size: 26px; width: 90px; text-align: center;" oninput="updateFromInput('occupants'); calculate();">
+          <span style="font-size: 13px; color: var(--text-sub); font-weight: 700;">desks/people</span>
         </div>
         <button class="step-btn" onclick="changeStep('occupants', 1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">+</button>
       </div>
+
+      <!-- Desk Detailing Level -->
+      <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 800; color: var(--gold);">Desk & Workstation Detailing Level:</span>
+          <span id="desk-time-hint" style="font-size: 11px; color: var(--text-muted); font-weight: 700;">30m desk time</span>
+        </div>
+        <div class="pill-group">
+          <div class="pill-btn" id="desk-quick" onclick="setDeskDetail('quick')">🗑️ Trash Only (30s)</div>
+          <div class="pill-btn active" id="desk-standard" onclick="setDeskDetail('standard')">🧽 Standard (1m)</div>
+          <div class="pill-btn" id="desk-deep" onclick="setDeskDetail('deep')">✨ Lift & Wipe (2m)</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Input 5: Hourly Billing Rate Input -->
+    <!-- Input 5: Floor Surface Mix (Sweeping & Mopping vs Vacuuming) -->
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">5. Target Hourly Billing Rate ($/hr)</label>
+        <label class="input-label" style="margin-bottom: 0;">5. Floor Surfaces (Mopping vs Vacuuming)</label>
+        <span id="floor-mix-display" style="font-size: 11px; font-weight: 800; color: var(--gold);">70% Carpet • 30% Hard Floor</span>
+      </div>
+      <input type="range" id="slider-hardfloor" min="0" max="100" value="30" step="5" style="width: 100%; accent-color: var(--gold); cursor: pointer;" oninput="updateFloorMix(this.value)">
+      <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px; font-weight: 700;">
+        <span>100% Carpet (Vacuum Only)</span>
+        <span>50/50</span>
+        <span>100% Hard Tile/Wood (Mop & Sweep)</span>
+      </div>
+    </div>
+
+    <!-- Input 6: Hourly Billing Rate Input -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label class="input-label" style="margin-bottom: 0;">6. Target Hourly Billing Rate ($/hr)</label>
         <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Customer Rate</span>
       </div>
       <div style="display: flex; align-items: center; background: var(--silver-light); border: 1.2px solid var(--silver-border); border-radius: 10px; padding: 0 14px;">
         <span style="font-size: 20px; font-weight: 900; color: var(--gold); margin-right: 6px;">$</span>
-        <input type="number" id="hourlyRate" class="input-field" value="60" placeholder="60.00" style="background: transparent; border: none; padding: 12px 0; font-size: 22px; width: 100%;">
+        <input type="number" id="hourlyRate" class="input-field" value="60" placeholder="60.00" style="background: transparent; border: none; padding: 12px 0; font-size: 22px; width: 100%;" oninput="calculate()">
         <span style="font-size: 13px; font-weight: 700; color: var(--text-sub);">/ hr</span>
       </div>
     </div>
 
-    <!-- Input 6: Cleanings Per Week -->
+    <!-- Input 7: Cleanings Per Week -->
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">6. Cleanings Per Week</label>
+        <label class="input-label" style="margin-bottom: 0;">7. Cleanings Per Week</label>
         <span id="monthly-visits-hint" style="font-size: 11px; font-weight: 800; color: var(--gold);">13.0 visits / mo</span>
       </div>
       <div class="pill-group" id="freq-pills">
@@ -616,13 +637,35 @@
       </div>
     </div>
 
-    <!-- Input 7: Cleaning Difficulty -->
+    <!-- Input 8: Cleaning Difficulty -->
     <div class="card">
-      <label class="input-label" id="label-diff" data-rename-key="label-diff" style="cursor: pointer; user-select: none;" title="Long-press to rename">7. Cleaning Difficulty / Condition</label>
+      <label class="input-label" id="label-diff" data-rename-key="label-diff" style="cursor: pointer; user-select: none;" title="Long-press to rename">8. Cleaning Difficulty / Condition</label>
       <div class="pill-group">
         <div class="pill-btn" id="diff-light" onclick="setDiff('light')">🍃 Light (0.95x)</div>
         <div class="pill-btn active" id="diff-normal" onclick="setDiff('normal')">🏢 Normal (1.00x)</div>
         <div class="pill-btn" id="diff-heavy" onclick="setDiff('heavy')">⚡ Heavy (1.20x)</div>
+      </div>
+    </div>
+
+    <!-- Input 9: Live Walkthrough Time Adjuster (Manual Time Slider) -->
+    <div class="card" style="border: 1.5px solid var(--gold); background: linear-gradient(180deg, #161A22 0%, #0F1218 100%);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div>
+          <span style="font-size: 12px; font-weight: 900; color: var(--gold);">🎯 Walkthrough Time Adjuster</span>
+          <div style="font-size: 10px; color: var(--text-muted);" id="baseline-calc-hint">Calculated Base: 4.5 hrs</div>
+        </div>
+        <div style="text-align: right;">
+          <span id="slider-time-display" style="font-size: 18px; font-weight: 900; color: #FFFFFF;">4.5 hrs</span>
+          <span style="font-size: 11px; color: var(--gold); font-weight: 700; display: block;" id="slider-mins-display">270 mins</span>
+        </div>
+      </div>
+
+      <input type="range" id="slider-labor-hours" min="0.5" max="12.0" step="0.25" value="4.5" style="width: 100%; accent-color: var(--gold); cursor: pointer; height: 8px;" oninput="onWalkthroughSliderChange(this.value)">
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 8px;">
+        <button class="btn-secondary" onclick="nudgeTime(-0.25)" style="padding: 6px 12px; font-size: 11px; flex: 1;">− 15 mins</button>
+        <button class="btn-secondary" onclick="resetToCalculatedTime()" style="padding: 6px 10px; font-size: 10px; background: transparent; border: 1px dashed var(--border); color: var(--gold);">↺ Reset Auto</button>
+        <button class="btn-secondary" onclick="nudgeTime(0.25)" style="padding: 6px 12px; font-size: 11px; flex: 1;">+ 15 mins</button>
       </div>
     </div>
 
@@ -1470,6 +1513,56 @@
     // Initialize long-press when page loads
     initLongPressRenaming();
 
+    let deskDetailMode = 'standard';
+    let hardFloorPercent = 30;
+    let manualTimeOverride = null;
+    let calculatedAutoHours = 4.5;
+
+    function setDeskDetail(mode) {
+      deskDetailMode = mode;
+      document.getElementById('desk-quick').classList.toggle('active', mode === 'quick');
+      document.getElementById('desk-standard').classList.toggle('active', mode === 'standard');
+      document.getElementById('desk-deep').classList.toggle('active', mode === 'deep');
+      
+      const perDesk = mode === 'quick' ? 0.5 : (mode === 'deep' ? 2.0 : 1.0);
+      const totalMins = Math.round(occupants * perDesk);
+      document.getElementById('desk-time-hint').innerText = `${totalMins}m desk time`;
+      calculate();
+    }
+
+    function updateFloorMix(val) {
+      hardFloorPercent = parseInt(val) || 0;
+      const carpetPct = 100 - hardFloorPercent;
+      document.getElementById('floor-mix-display').innerText = `${carpetPct}% Carpet • ${hardFloorPercent}% Hard Floor`;
+      calculate();
+    }
+
+    function onWalkthroughSliderChange(val) {
+      manualTimeOverride = parseFloat(val);
+      updateTimeSliderDisplays(manualTimeOverride);
+      calculate(true);
+    }
+
+    function nudgeTime(delta) {
+      const current = manualTimeOverride !== null ? manualTimeOverride : (calculatedAutoHours || 4.5);
+      const nextVal = Math.max(0.5, Math.min(12.0, Math.round((current + delta) * 4) / 4));
+      manualTimeOverride = nextVal;
+      document.getElementById('slider-labor-hours').value = nextVal;
+      updateTimeSliderDisplays(nextVal);
+      calculate(true);
+    }
+
+    function resetToCalculatedTime() {
+      manualTimeOverride = null;
+      calculate();
+    }
+
+    function updateTimeSliderDisplays(hours) {
+      const mins = Math.round(hours * 60);
+      document.getElementById('slider-time-display').innerText = `${hours.toFixed(2)} hrs`;
+      document.getElementById('slider-mins-display').innerText = `${mins} mins`;
+    }
+
     function updateFromInput(type) {
       if (type === 'restrooms') {
         restrooms = Math.max(0, parseInt(document.getElementById('input-restrooms').value) || 0);
@@ -1477,6 +1570,11 @@
         kitchens = Math.max(0, parseInt(document.getElementById('input-kitchens').value) || 0);
       } else if (type === 'occupants') {
         occupants = Math.max(0, parseInt(document.getElementById('input-occupants').value) || 0);
+        const perDesk = deskDetailMode === 'quick' ? 0.5 : (deskDetailMode === 'deep' ? 2.0 : 1.0);
+        const totalMins = Math.round(occupants * perDesk);
+        if (document.getElementById('desk-time-hint')) {
+          document.getElementById('desk-time-hint').innerText = `${totalMins}m desk time`;
+        }
       }
     }
 
@@ -1487,6 +1585,7 @@
       });
       const monthlyVisits = (visitsPerWeek * 52 / 12).toFixed(1);
       document.getElementById('monthly-visits-hint').innerText = `${monthlyVisits} visits / mo`;
+      calculate();
     }
 
     function setDiff(d) {
@@ -1494,6 +1593,7 @@
       document.getElementById('diff-light').classList.toggle('active', d === 'light');
       document.getElementById('diff-normal').classList.toggle('active', d === 'normal');
       document.getElementById('diff-heavy').classList.toggle('active', d === 'heavy');
+      calculate();
     }
 
     function openModal(id) {
@@ -1506,9 +1606,9 @@
       if (m) m.style.display = 'none';
     }
 
-    function calculate() {
+    function calculate(isManual) {
       const calcBtn = document.getElementById('btn-main-calculate');
-      if (calcBtn) {
+      if (calcBtn && !isManual) {
         calcBtn.innerHTML = '✓ QUOTE CALCULATED';
         calcBtn.style.background = '#10B981';
         calcBtn.style.color = '#FFFFFF';
@@ -1525,7 +1625,7 @@
       const wage = parseFloat(document.getElementById('set-wage').value) || 24.0;
       const prodRate = parseFloat(document.getElementById('set-prod').value) || 3000.0;
       const billRate = parseFloat(document.getElementById('hourlyRate').value) || parseFloat(document.getElementById('set-bill').value) || 60.0;
-      document.getElementById('set-bill').value = billRate;
+      if (document.getElementById('set-bill')) document.getElementById('set-bill').value = billRate;
       const targetMargin = (parseFloat(document.getElementById('set-margin').value) || 40.0) / 100.0;
       const minCharge = parseFloat(document.getElementById('set-min').value) || 125.0;
 
@@ -1535,8 +1635,13 @@
 
       if (sqft <= 0) return;
 
-      // 1. Labor Formula
-      const baseMinutes = (sqft / prodRate) * 60.0;
+      // 1. Labor Formula with Floor Mix & Desk Detailing
+      const floorMixMultiplier = 1.0 + (hardFloorPercent / 100.0) * 0.30;
+      const baseMinutes = ((sqft / prodRate) * 60.0) * floorMixMultiplier;
+
+      const perDesk = deskDetailMode === 'quick' ? 0.5 : (deskDetailMode === 'deep' ? 2.0 : 1.0);
+      const deskMinutes = occupants * perDesk;
+
       const toilets = Math.ceil(restrooms * 1.5);
       const urinals = Math.floor(restrooms * 0.5);
       const sinks = Math.ceil(restrooms * 1.5);
@@ -1546,7 +1651,7 @@
       const entranceMinutes = 5.0;
       const stairMinutes = stairs * 8.0;
 
-      const subtotalMinutes = baseMinutes + restroomMinutes + breakroomMinutes + confMinutes + entranceMinutes + stairMinutes + security;
+      const subtotalMinutes = baseMinutes + deskMinutes + restroomMinutes + breakroomMinutes + confMinutes + entranceMinutes + stairMinutes + security;
 
       let trafficMult = 1.05;
       if (occupants > 75) trafficMult = 1.25;
@@ -1558,8 +1663,27 @@
       else if (difficulty === 'heavy') diffMult = 1.20;
 
       const compositeMultiplier = trafficMult * diffMult;
-      const finalMinutes = subtotalMinutes * compositeMultiplier;
-      const laborHours = Math.max(0.5, finalMinutes / 60.0);
+      const finalAutoMinutes = subtotalMinutes * compositeMultiplier;
+      calculatedAutoHours = Math.max(0.5, Math.round((finalAutoMinutes / 60.0) * 4) / 4);
+
+      if (document.getElementById('baseline-calc-hint')) {
+        document.getElementById('baseline-calc-hint').innerText = `Calculated Base: ${calculatedAutoHours.toFixed(2)} hrs (${finalAutoMinutes.toFixed(0)}m)`;
+      }
+
+      let laborHours;
+      let finalMinutes;
+
+      if (manualTimeOverride !== null && isManual) {
+        laborHours = manualTimeOverride;
+        finalMinutes = laborHours * 60.0;
+      } else {
+        laborHours = calculatedAutoHours;
+        finalMinutes = finalAutoMinutes;
+        if (document.getElementById('slider-labor-hours')) {
+          document.getElementById('slider-labor-hours').value = laborHours;
+        }
+        updateTimeSliderDisplays(laborHours);
+      }
 
       // 2. Cost Engine
       const directLabor = laborHours * wage;
