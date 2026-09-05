@@ -564,26 +564,40 @@
       </div>
     </div>
 
-    <!-- Input 4: Office Staff & Occupancy -->
+    <!-- Input 4: Office Staff & Desks (Dual Steppers) -->
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <label class="input-label" style="margin-bottom: 0;">4. Staff / Occupants & Workstations</label>
-        <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Type or tap + / −</span>
+        <label class="input-label" style="margin-bottom: 0;">4. Staff Occupancy & Workstation Desks</label>
+        <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Tap + / − or type</span>
       </div>
-      <div class="stepper-control" style="background: var(--silver-light); padding: 6px; margin-bottom: 12px;">
-        <button class="step-btn" onclick="changeStep('occupants', -1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">−</button>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1;">
-          <input type="number" id="input-occupants" class="step-input" value="30" min="0" style="font-size: 26px; width: 90px; text-align: center;" oninput="updateFromInput('occupants'); calculate();">
-          <span style="font-size: 13px; color: var(--text-sub); font-weight: 700;">desks/people</span>
+
+      <div class="stepper-row" style="margin-bottom: 12px; gap: 10px;">
+        <!-- Left: People / Staff -->
+        <div class="stepper-card" style="margin-bottom: 0; background: var(--card-elevated); border: 1.2px solid var(--silver-border);">
+          <div class="stepper-label" style="font-size: 11px; font-weight: 800; color: var(--text-main);">👥 Staff (People)</div>
+          <div class="stepper-control" style="background: var(--silver-light); padding: 4px;">
+            <button class="step-btn" onclick="changeStep('occupants', -1); calculate();" style="width: 36px; height: 36px; font-size: 20px; font-weight: 900;">−</button>
+            <input type="number" id="input-occupants" class="step-input" value="65" min="0" style="font-size: 19px; font-weight: 900; width: 55px; text-align: center;" oninput="updateFromInput('occupants'); calculate();">
+            <button class="step-btn" onclick="changeStep('occupants', 1); calculate();" style="width: 36px; height: 36px; font-size: 20px; font-weight: 900;">+</button>
+          </div>
         </div>
-        <button class="step-btn" onclick="changeStep('occupants', 1)" style="width: 48px; height: 42px; font-size: 22px; font-weight: 900;">+</button>
+
+        <!-- Right: Desks / Workstations -->
+        <div class="stepper-card" style="margin-bottom: 0; background: var(--card-elevated); border: 1.2px solid var(--gold);">
+          <div class="stepper-label" style="font-size: 11px; font-weight: 800; color: var(--gold);">🖥️ Desks (Wiped)</div>
+          <div class="stepper-control" style="background: var(--silver-light); padding: 4px;">
+            <button class="step-btn" onclick="changeStep('desks', -1); calculate();" style="width: 36px; height: 36px; font-size: 20px; font-weight: 900;">−</button>
+            <input type="number" id="input-desks" class="step-input" value="65" min="0" style="font-size: 19px; font-weight: 900; width: 55px; text-align: center; color: var(--gold);" oninput="updateFromInput('desks'); calculate();">
+            <button class="step-btn" onclick="changeStep('desks', 1); calculate();" style="width: 36px; height: 36px; font-size: 20px; font-weight: 900;">+</button>
+          </div>
+        </div>
       </div>
 
       <!-- Desk Detailing Level -->
       <div style="border-top: 1px solid var(--border); padding-top: 10px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
           <span style="font-size: 11px; font-weight: 800; color: var(--gold);">Desk & Workstation Detailing Level:</span>
-          <span id="desk-time-hint" style="font-size: 11px; color: var(--text-muted); font-weight: 700;">30m desk time</span>
+          <span id="desk-time-hint" style="font-size: 11px; color: var(--gold); font-weight: 700;">65m desk time</span>
         </div>
         <div class="pill-group">
           <div class="pill-btn" id="desk-quick" onclick="setDeskDetail('quick')">🗑️ Trash Only (30s)</div>
@@ -1376,6 +1390,7 @@
     let restrooms = 4;
     let kitchens = 2;
     let occupants = 65;
+    let desks = 65;
     let visitsPerWeek = 3;
     let difficulty = 'normal';
     let generatedProposalId = null;
@@ -1390,6 +1405,10 @@
       } else if (type === 'occupants') {
         occupants = Math.max(0, occupants + delta);
         document.getElementById('input-occupants').value = occupants;
+      } else if (type === 'desks') {
+        desks = Math.max(0, desks + delta);
+        document.getElementById('input-desks').value = desks;
+        updateDeskHint();
       }
     }
 
@@ -1518,15 +1537,21 @@
     let manualTimeOverride = null;
     let calculatedAutoHours = 4.5;
 
+    function updateDeskHint() {
+      const perDesk = deskDetailMode === 'quick' ? 0.5 : (deskDetailMode === 'deep' ? 2.0 : 1.0);
+      const totalMins = Math.round(desks * perDesk);
+      const hintEl = document.getElementById('desk-time-hint');
+      if (hintEl) {
+        hintEl.innerText = `${totalMins}m desk time`;
+      }
+    }
+
     function setDeskDetail(mode) {
       deskDetailMode = mode;
       document.getElementById('desk-quick').classList.toggle('active', mode === 'quick');
       document.getElementById('desk-standard').classList.toggle('active', mode === 'standard');
       document.getElementById('desk-deep').classList.toggle('active', mode === 'deep');
-      
-      const perDesk = mode === 'quick' ? 0.5 : (mode === 'deep' ? 2.0 : 1.0);
-      const totalMins = Math.round(occupants * perDesk);
-      document.getElementById('desk-time-hint').innerText = `${totalMins}m desk time`;
+      updateDeskHint();
       calculate();
     }
 
@@ -1570,11 +1595,9 @@
         kitchens = Math.max(0, parseInt(document.getElementById('input-kitchens').value) || 0);
       } else if (type === 'occupants') {
         occupants = Math.max(0, parseInt(document.getElementById('input-occupants').value) || 0);
-        const perDesk = deskDetailMode === 'quick' ? 0.5 : (deskDetailMode === 'deep' ? 2.0 : 1.0);
-        const totalMins = Math.round(occupants * perDesk);
-        if (document.getElementById('desk-time-hint')) {
-          document.getElementById('desk-time-hint').innerText = `${totalMins}m desk time`;
-        }
+      } else if (type === 'desks') {
+        desks = Math.max(0, parseInt(document.getElementById('input-desks').value) || 0);
+        updateDeskHint();
       }
     }
 
@@ -1640,7 +1663,7 @@
       const baseMinutes = ((sqft / prodRate) * 60.0) * floorMixMultiplier;
 
       const perDesk = deskDetailMode === 'quick' ? 0.5 : (deskDetailMode === 'deep' ? 2.0 : 1.0);
-      const deskMinutes = occupants * perDesk;
+      const deskMinutes = desks * perDesk;
 
       const toilets = Math.ceil(restrooms * 1.5);
       const urinals = Math.floor(restrooms * 0.5);
@@ -1891,7 +1914,7 @@
       if (document.getElementById('doc-sqft')) document.getElementById('doc-sqft').innerText = sqFtVal.toLocaleString() + ' Sq Ft';
       if (document.getElementById('doc-restrooms')) document.getElementById('doc-restrooms').innerText = restrooms + ' Fixture Areas';
       if (document.getElementById('doc-kitchens')) document.getElementById('doc-kitchens').innerText = kitchens;
-      if (document.getElementById('doc-occupants')) document.getElementById('doc-occupants').innerText = occupants + ' Personnel';
+      if (document.getElementById('doc-occupants')) document.getElementById('doc-occupants').innerText = occupants + ' Personnel (' + desks + ' Desks)';
       const freqVal = (typeof visitsPerWeek !== 'undefined') ? visitsPerWeek : 3;
       if (document.getElementById('doc-freq-label')) document.getElementById('doc-freq-label').innerText = freqVal + 'x Cleanings Per Week';
       if (document.getElementById('doc-start-date')) document.getElementById('doc-start-date').innerText = formattedStartDate;
