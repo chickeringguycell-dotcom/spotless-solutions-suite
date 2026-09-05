@@ -1,8 +1,11 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.spotlesssolutions.timecard",
-        "sha256_cert_fingerprints": ["9E:7B:8C:FF:E3:BB:F7:3A:2C:FF:2E:BB:77:F1:DC:62:EC:9E:36:2E:4B:AC:B1:BB:FA:24:EC:87:8C:0E:23:A0"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.spotlesssolutions.timecard",
+    "sha256_cert_fingerprints": [
+      "9E:7B:8C:FF:E3:BB:F7:3A:2C:FF:2E:BB:77:F1:DC:62:EC:9E:36:2E:4B:AC:B1:BB:FA:24:EC:87:8C:0E:23:A0",
+      "ED:9E:C3:F2:D9:0D:E0:EF:37:43:1F:8A:36:FE:47:8E:CB:2F:C3:AE:7D:4B:24:E3:46:CB:66:30:34:75:AF:43"
+    ]
+  }
+}]
