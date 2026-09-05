@@ -3,7 +3,7 @@
 // Supports: Windows PC, Android Phone, and Apple iPhone (iOS 16.4+ Home-Screen PWA)
 // ============================================================================
 
-const CACHE_NAME = 'sos-pwa-engine-v103';
+const CACHE_NAME = 'sos-pwa-engine-v104';
 const STATIC_ASSETS = [
   './',
   'manifest.json',
